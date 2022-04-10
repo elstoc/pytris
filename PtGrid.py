@@ -21,8 +21,6 @@ class PtOverlapRight(Exception):
 class PtOverlapBottom(Exception):
     pass
 
-
-
 class PtGrid:
     """The pytris game grid (default/minimum 10x20; maximum 50x50)"""
     

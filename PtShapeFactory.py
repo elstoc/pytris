@@ -35,15 +35,15 @@ class PtShapeFactory:
                                  [0,0,0,0],
                                  [0,0,0,0]])
 
-        self._base_forms.append([[0,0,1,0],
-                                 [0,0,1,0],
+        self._base_forms.append([[0,0,0,0],
                                  [0,1,1,0],
-                                 [0,0,0,0]])
-
-        self._base_forms.append([[0,1,0,0],
                                  [0,1,0,0],
+                                 [0,1,0,0]])
+
+        self._base_forms.append([[0,0,0,0],
                                  [0,1,1,0],
-                                 [0,0,0,0]])
+                                 [0,1,0,0],
+                                 [0,1,0,0]])
 
         self._shape_variants = []
 
@@ -53,7 +53,7 @@ class PtShapeFactory:
             variants = []
             for i in range(4):
                 #rotate the form
-                variant = np.rot90(form, 3-i).tolist()
+                variant = np.rot90(form, i).tolist()
 
                 # remove any empty rows
                 for j in reversed(range(len(variant))):

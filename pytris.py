@@ -45,7 +45,7 @@ while 1:
                     grid_surf.blit(unit_square, (x*unit_size, y*unit_size))
 
         next_surf = pygame.Surface((4*unit_size, 4*unit_size))
-        next_matrix = game_grid.next_shape.list(3)
+        next_matrix = game_grid.next_shape.list(0)
         for x in range(len(next_matrix[0])):
             for y in range(len(next_matrix)):
                 unit_square.fill(COLOURS[next_matrix[y][x]])
