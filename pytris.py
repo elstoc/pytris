@@ -19,7 +19,7 @@ screen = pygame.display.set_mode((screen_width,screen_height))
 
 unit_square = pygame.Surface((unit_size,unit_size))
 counter = 1
-speed = 20 # lower is faster
+speed = 50 # lower is faster
 
 while 1:
     # quit gracefully
