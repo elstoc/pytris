@@ -16,7 +16,7 @@ class PtShape:
 
     def rotate(self, angle=1):
         """rotate the shape clockwise by angle * 90 degrees"""
-        self.rotation = (self._rotation + angle) % 4
+        self.rotation = (self.rotation + angle) % 4
 
     def list(self):
         # return the array representing the correct rotational variant

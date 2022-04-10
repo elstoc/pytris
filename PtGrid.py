@@ -90,7 +90,15 @@ class PtGrid:
         elif(movement == MV_ROTATE):
             # rotation may produce overlaps initially but should try some
             # move-left/move-right to resolve
-            return True
+            try:
+                try_shape.rotate()
+                self.superpose_shape(try_shape)
+            except:
+                print("can't rotate")
+                return False
+            else:
+                self.curr_shape = try_shape
+                return True
 
     def superpose_shape(self, shape):
         # create a new grid with same dimensions as game_grid
