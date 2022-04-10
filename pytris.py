@@ -26,6 +26,7 @@ unit_square = pygame.Surface((unit_size,unit_size))
 counter = 1
 speed = 50 # lower is faster
 draw = True
+pygame.key.set_repeat(200, 150)
 
 while 1:
     # quit gracefully
@@ -52,7 +53,7 @@ while 1:
 
         screen_surf = pygame.Surface((screen_width, screen_height))
         screen_surf.blit(grid_surf, (info_width*unit_size,0))
-        screen_surf.blit(next_surf, (int(unit_size * (info_width - len(next_matrix[0])/2),(grid_height-3)*unit_size))
+        screen_surf.blit(next_surf, (int(unit_size * (info_width - len(next_matrix[0]))/2),(grid_height-3)*unit_size))
 
         # draw the grid and then flip it because we use inverted coords
         screen.blit(screen_surf, screen_surf.get_rect())
@@ -62,29 +63,27 @@ while 1:
         # show the updated screen
         pygame.display.flip()
 
+    draw = False
+
+    if not counter % speed:
+        draw = game_grid.move(MV_DOWN)
+
+    keys_pressed = []
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
             sys.exit()
-        elif event.type == pygame.KEYUP:
-            # handle a single key event per loop (break when handled)
-            if event.key == K_q:
-                sys.exit()
-            elif event.key == K_LEFT:
-                draw = game_grid.move(MV_LEFT)
-                break
-            elif event.key == K_RIGHT:
-                draw = game_grid.move(MV_RIGHT)
-                break
-            elif event.key == K_DOWN:
-                draw = game_grid.move(MV_DOWN)
-                break
-            elif event.key == K_SPACE:
-                draw = game_grid.move(MV_ROTATE)
-                break
+        elif (event.type == pygame.KEYDOWN and event.key in (K_RIGHT, K_LEFT, K_DOWN, K_UP)):
+            keys_pressed.append(event.key)
 
-    if not counter % speed:
-        # move down and create a new shape if hitting the bottom
-        draw = game_grid.move(MV_DOWN)
+    for keyp in keys_pressed:
+        if keyp == K_RIGHT:
+            draw = draw or game_grid.move(MV_RIGHT)
+        if keyp == K_LEFT:
+            draw = draw or game_grid.move(MV_LEFT)
+        if keyp == K_DOWN:
+            draw = draw or game_grid.move(MV_DOWN)
+        if keyp == K_UP:
+            draw = draw or game_grid.move(MV_ROTATE)
 
     pygame.time.wait(10)
     counter += 1

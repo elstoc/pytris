@@ -36,12 +36,11 @@ class PtGrid:
 
         self.next_shape = self.bf.new_shape()
         self.new_shape()
-        self.fail_down = False
 
     def new_shape(self):
         self.curr_shape = self.next_shape
         self.curr_shape.posx = int(self.width/2) - int(self.curr_shape.width/2)
-        self.curr_shape.posy = self.height
+        self.curr_shape.posy = self.height - 1
         self.next_shape = self.bf.new_shape()
         return self.curr_shape
 
@@ -59,6 +58,8 @@ class PtGrid:
         self.new_shape()
 
     def move(self, movement):
+        """move a shape on the grid
+        return True if the grid changed"""
         try_shape = copy.deepcopy(self.curr_shape)
         if(movement == MV_LEFT):
             try_shape.posx -= 1
@@ -71,12 +72,11 @@ class PtGrid:
             try:
                 self.superpose_shape(try_shape)
             except:
-                if(movement == MV_DOWN and self.fail_down):
+                if (movement == MV_DOWN):
                     self.freeze_shape(self.curr_shape)
-                    self.fail_down = False
+                    return True
                 else:
-                    self.fail_down = True
-                return False
+                    return False
             else:
                 self.curr_shape = try_shape
                 return True
@@ -86,8 +86,8 @@ class PtGrid:
             # 4x4 shapes may need to move two spaces
             # 3x3 shapes may need to move one space
             # 2x2 shapes are symmetrical so will always pass
+            try_shape.rotate()
             try:
-                try_shape.rotate()
                 self.superpose_shape(try_shape)
             except:
                 print("can't rotate")
