@@ -47,7 +47,7 @@ while 1:
     if draw:
         # get the game grid to be drawn this iteration
         # and draw it
-        grid_to_draw = game_grid.draw_grid
+        grid_to_draw = game_grid.list()
         grid_surf = pygame.Surface((screen_width,screen_height))
         grid_surf.fill((50,50,50))
 
