@@ -25,34 +25,10 @@ screen = pygame.display.set_mode((screen_width,screen_height))
 unit_square = pygame.Surface((unit_size,unit_size))
 counter = 1
 speed = 50 # lower is faster
+draw = True
 
 while 1:
     # quit gracefully
-    draw = False
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT: 
-            sys.exit()
-        elif event.type == pygame.KEYUP:
-            # handle a single key event per loop (break when handled)
-            if event.key == K_q:
-                sys.exit()
-            elif event.key == K_LEFT:
-                draw = game_grid.move(MV_LEFT)
-                break
-            elif event.key == K_RIGHT:
-                draw = game_grid.move(MV_RIGHT)
-                break
-            elif event.key == K_DOWN:
-                draw = game_grid.move(MV_DOWN)
-                break
-            elif event.key == K_SPACE:
-                draw = game_grid.move(MV_ROTATE)
-                break
-
-    if not counter % speed:
-        # move down and create a new shape if hitting the bottom
-        draw = game_grid.move(MV_DOWN)
-
     if draw:
         # get the game grid to be drawn this iteration
         # and draw it
@@ -85,6 +61,30 @@ while 1:
 
         # show the updated screen
         pygame.display.flip()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: 
+            sys.exit()
+        elif event.type == pygame.KEYUP:
+            # handle a single key event per loop (break when handled)
+            if event.key == K_q:
+                sys.exit()
+            elif event.key == K_LEFT:
+                draw = game_grid.move(MV_LEFT)
+                break
+            elif event.key == K_RIGHT:
+                draw = game_grid.move(MV_RIGHT)
+                break
+            elif event.key == K_DOWN:
+                draw = game_grid.move(MV_DOWN)
+                break
+            elif event.key == K_SPACE:
+                draw = game_grid.move(MV_ROTATE)
+                break
+
+    if not counter % speed:
+        # move down and create a new shape if hitting the bottom
+        draw = game_grid.move(MV_DOWN)
 
     pygame.time.wait(10)
     counter += 1
