@@ -24,6 +24,14 @@ class PtGrid:
         self.next_block = self.bf.new_block()
         return self.curr_block
 
+    def move_left(self):
+        self.posx -= 1
+        self.draw_grid = self.superpose_grids()
+
+    def move_right(self):
+        self.posx += 1
+        self.draw_grid = self.superpose_grids()
+
     def move_down(self):
         self.posy -= 1
         if self.posy < 0:

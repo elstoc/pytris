@@ -1,4 +1,5 @@
 import sys, pygame
+from pygame import locals
 import random
 
 from PtBlockFactory import PtBlockFactory
@@ -22,13 +23,28 @@ speed = 20 # lower is faster
 
 while 1:
     # quit gracefully
+    draw = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
+        if event.type == pygame.KEYUP:
+            if event.key == locals.K_LEFT:
+                game_grid.move_left()
+                draw = True
+                break
+            elif event.key == locals.K_RIGHT:
+                game_grid.move_right()
+                draw = True
+                break
+            elif event.key == locals.K_DOWN:
+                game_grid.move_down()
+                draw = True
 
     if not counter % speed:
         # move down and create a new block if hitting the bottom
         game_grid.move_down()
+        draw = True
 
+    if draw:
         # get the game grid to be drawn this iteration
         # and draw it
         grid_to_draw = game_grid.draw_grid
