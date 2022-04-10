@@ -25,21 +25,21 @@ class PtGrid:
     """The pytris game grid (default/minimum 10x20; maximum 50x50)"""
     
     def __init__(self, width=10, height=20):
-        self.bf = PtShapeFactory()
+        self.sfact = PtShapeFactory()
 
         self.width = min(max(10, width),50)
         self.height = min(max(20, height),50)
 
         self.active_grid = [[0 for x in range(self.width)] for y in range(self.height)]
 
-        self.next_shape = self.bf.new_shape()
+        self.next_shape = self.sfact.new_shape()
         self.new_shape()
 
     def new_shape(self):
         self.curr_shape = self.next_shape
         self.curr_shape.posx = int(self.width/2) - int(self.curr_shape.width/2)
         self.curr_shape.posy = self.height - 1
-        self.next_shape = self.bf.new_shape()
+        self.next_shape = self.sfact.new_shape()
         return self.curr_shape
 
     def freeze_shape(self, shape):
