@@ -54,8 +54,10 @@ class PtGrid:
                 self.superpose_shape(try_shape)
             except:
                 print("can't move left")
+                return False
             else:
                 self.curr_shape = try_shape
+                return True
         elif(movement == MV_RIGHT):
             # right movement: disallow all overlaps
             try:
@@ -63,8 +65,10 @@ class PtGrid:
                 self.superpose_shape(try_shape)
             except:
                 print("can't move right")
+                return False
             else:
                 self.curr_shape = try_shape
+                return True
         elif(movement == MV_DOWN):
             # down movement: disallow all overlaps
             #                freeze to grid the second time a movedown fails
@@ -79,12 +83,14 @@ class PtGrid:
                     self.fail_down = False
                 else:
                     self.fail_down = True
+                return False
             else:
                 self.curr_shape = try_shape
+                return True
         elif(movement == MV_ROTATE):
             # rotation may produce overlaps initially but should try some
             # move-left/move-right to resolve
-            None
+            return True
 
     def superpose_shape(self, shape):
         # create a new grid with same dimensions as game_grid

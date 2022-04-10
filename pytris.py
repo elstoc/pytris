@@ -28,21 +28,17 @@ while 1:
         if event.type == pygame.QUIT: sys.exit()
         if event.type == pygame.KEYUP:
             if event.key == K_LEFT:
-                game_grid.move(MV_LEFT)
-                draw = True
+                draw = game_grid.move(MV_LEFT)
                 break
             elif event.key == K_RIGHT:
-                game_grid.move(MV_RIGHT)
-                draw = True
+                draw = game_grid.move(MV_RIGHT)
                 break
             elif event.key == K_DOWN:
-                game_grid.move(MV_DOWN)
-                draw = True
+                draw = game_grid.move(MV_DOWN)
 
     if not counter % speed:
         # move down and create a new shape if hitting the bottom
-        game_grid.move(MV_DOWN)
-        draw = True
+        draw = game_grid.move(MV_DOWN)
 
     if draw:
         # get the game grid to be drawn this iteration
