@@ -2,8 +2,8 @@ from functools import reduce
 from PtConsts import *
 import random
 
-class PtBlock:
-    """given an initial block layout, create rotational variants
+class PtShape:
+    """given an initial shape layout, create rotational variants
        and change the rotation when requested"""
 
     def __init__(self, variants):
@@ -15,7 +15,7 @@ class PtBlock:
         self.posx = self.posy = 0
 
     def rotate(self, angle=1):
-        """rotate the block clockwise by angle * 90 degrees"""
+        """rotate the shape clockwise by angle * 90 degrees"""
         self.rotation = (self._rotation + angle) % 4
 
     def list(self):

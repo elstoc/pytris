@@ -2,7 +2,7 @@ import sys, pygame
 from pygame.locals import *
 import random
 
-from PtBlockFactory import PtBlockFactory
+from PtShapeFactory import PtShapeFactory
 from PtGrid import PtGrid
 from PtConsts import *
 
@@ -40,7 +40,7 @@ while 1:
                 draw = True
 
     if not counter % speed:
-        # move down and create a new block if hitting the bottom
+        # move down and create a new shape if hitting the bottom
         game_grid.move(MV_DOWN)
         draw = True
 

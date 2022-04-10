@@ -1,11 +1,11 @@
-from PtBlock import PtBlock
+from PtShape import PtShape
 from functools import reduce
 import random
 import numpy as np
 
-class PtBlockFactory:
-    """store all possible block formations/rotations and 
-       deliver new PtBlock objects to the game when requested"""
+class PtShapeFactory:
+    """store all possible shape formations/rotations and 
+       deliver new PtShape objects to the game when requested"""
 
     def __init__(self):
         """store all possible _base_forms in an array
@@ -45,9 +45,9 @@ class PtBlockFactory:
                                  [0,0,1,0],
                                  [0,0,1,0]])
 
-        self._block_variants = []
+        self._shape_variants = []
 
-        # now create a list of all rotational block variants
+        # now create a list of all rotational shape variants
         # increment rotation to rotate by 90deg clockwise
         for form in self._base_forms:
             variants = []
@@ -62,12 +62,12 @@ class PtBlockFactory:
 
                 variants.append(variant)
 
-            self._block_variants.append(variants)
+            self._shape_variants.append(variants)
 
-    def new_block(self):
-        """return a random block to the caller"""
+    def new_shape(self):
+        """return a random shape to the caller"""
         num_forms = len(self._base_forms)
         form = random.randrange(num_forms)
-        block =  PtBlock(self._block_variants[form])
-        return block
+        shape =  PtShape(self._shape_variants[form])
+        return shape
 
