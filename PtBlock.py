@@ -18,7 +18,7 @@ class PtBlock:
         """rotate the block clockwise by angle * 90 degrees"""
         self.rotation = (self._rotation + angle) % 4
 
-    def get_block_array(self):
+    def list(self):
         # return the array representing the correct rotational variant
         # multiply each array element by color
         return [ [ x * self.colour for x in y ] for y in self._variants[self.rotation] ]

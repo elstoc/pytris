@@ -55,20 +55,17 @@ class PtGrid:
         target_grid = copy.deepcopy(self.active_grid)
 
         # place the contents of shape_grid into game_grid
-        blockheight = len(self.curr_block.get_block_array())
-        blockwidth = len(self.curr_block.get_block_array()[0])
+        blockheight = len(self.curr_block.list())
+        blockwidth = len(self.curr_block.list()[0])
 
         for y in range(blockheight):
             for x in range(blockwidth):
                 if( self.curr_block.posy+y <= self.height-1 
                         and self.curr_block.posx+x <= self.width-1
-                        and self.curr_block.get_block_array()[y][x]):
-                    target_grid[self.curr_block.posy+y][self.curr_block.posx+x] = self.curr_block.get_block_array()[y][x]
+                        and self.curr_block.list()[y][x]):
+                    target_grid[self.curr_block.posy+y][self.curr_block.posx+x] = self.curr_block.list()[y][x]
 
         return target_grid
-
-    def get_grid_array(self):
-        return self.active_grid
 
     def __str__(self):
         return self.__repr__()
