@@ -10,10 +10,15 @@ import sys, pygame
 pygame.init()
 
 unit_size = 20
-game_grid = PtGrid()
+grid_width = 10
+grid_height = 20
+info_width = 8
+game_grid = PtGrid(grid_width, grid_height)
 
-screen_width = game_grid.width*unit_size
-screen_height = game_grid.height*unit_size
+screen_width = (grid_width+info_width)*unit_size
+screen_height = grid_height*unit_size
+game_width = grid_width*unit_size
+game_height = screen_height
 
 screen = pygame.display.set_mode((screen_width,screen_height))
 
@@ -52,7 +57,7 @@ while 1:
         # get the game grid to be drawn this iteration
         # and draw it
         grid_to_draw = game_grid.list()
-        grid_surf = pygame.Surface((screen_width,screen_height))
+        grid_surf = pygame.Surface((game_width,game_height))
         grid_surf.fill((50,50,50))
 
         # define a single unit_square and fill the game surface with grid unit_squares
@@ -62,8 +67,19 @@ while 1:
                     unit_square.fill(COLOURS[grid_to_draw[y][x]])
                     grid_surf.blit(unit_square, (x*unit_size, y*unit_size))
 
+        next_surf = pygame.Surface((4*unit_size, 4*unit_size))
+        next_matrix = game_grid.next_shape.list()
+        for x in range(len(next_matrix[0])):
+            for y in range(len(next_matrix)):
+                unit_square.fill(COLOURS[next_matrix[y][x]])
+                next_surf.blit(unit_square, (x*unit_size, y*unit_size))
+
+
+        screen_surf = pygame.Surface((screen_width, screen_height))
+        screen_surf.blit(grid_surf, (info_width*unit_size,0))
+        screen_surf.blit(next_surf, (2*unit_size,(grid_height-4)*unit_size))
         # draw the grid and then flip it because we use inverted coords
-        screen.blit(grid_surf, grid_surf.get_rect())
+        screen.blit(screen_surf, screen_surf.get_rect())
         display_surface = pygame.display.get_surface()
         display_surface.blit(pygame.transform.flip(display_surface, False, True), dest=(0, 0))
 
