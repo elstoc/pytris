@@ -25,10 +25,13 @@ while 1:
     # quit gracefully
     draw = False
     for event in pygame.event.get():
-        if event.type == pygame.QUIT: sys.exit()
-        if event.type == pygame.KEYUP:
+        if event.type == pygame.QUIT: 
+            sys.exit()
+        elif event.type == pygame.KEYUP:
             # handle a single key event per loop (break when handled)
-            if event.key == K_LEFT:
+            if event.key == K_q:
+                sys.exit()
+            elif event.key == K_LEFT:
                 draw = game_grid.move(MV_LEFT)
                 break
             elif event.key == K_RIGHT:

@@ -61,36 +61,17 @@ class PtGrid:
     def move(self, movement):
         try_shape = copy.deepcopy(self.curr_shape)
         if(movement == MV_LEFT):
-            # left movement: disallow all overlaps
-            try:
-                try_shape.posx -= 1
-                self.superpose_shape(try_shape)
-            except:
-                print("can't move left")
-                return False
-            else:
-                self.curr_shape = try_shape
-                return True
+            try_shape.posx -= 1
         elif(movement == MV_RIGHT):
-            # right movement: disallow all overlaps
-            try:
-                try_shape.posx += 1
-                self.superpose_shape(try_shape)
-            except:
-                print("can't move right")
-                return False
-            else:
-                self.curr_shape = try_shape
-                return True
+            try_shape.posx += 1
         elif(movement == MV_DOWN):
-            # down movement: disallow all overlaps
-            #                freeze to grid the second time a movedown fails
+            try_shape.posy -= 1
+
+        if (movement in (MV_LEFT, MV_RIGHT, MV_DOWN)):
             try:
-                try_shape.posy -= 1
                 self.superpose_shape(try_shape)
             except:
-                print("can't move down")
-                if(self.fail_down):
+                if(movement == MV_DOWN and self.fail_down):
                     self.freeze_shape(self.curr_shape)
                     self.fail_down = False
                 else:
