@@ -18,10 +18,11 @@ class PtShape:
         """rotate the shape clockwise by angle * 90 degrees"""
         self.rotation = (self.rotation + angle) % 4
 
-    def list(self):
+    def list(self, rotation = -1):
         # return the array representing the correct rotational variant
         # multiply each array element by color
-        return [ [ x * self.colour for x in y ] for y in self._variants[self.rotation] ]
+        if (rotation == -1): rotation = self.rotation
+        return [ [ x * self.colour for x in y ] for y in self._variants[rotation] ]
 
     def __repr__(self):
         """a representation of the shape, O represents the shape position"""
