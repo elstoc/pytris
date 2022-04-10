@@ -27,12 +27,16 @@ class PtGrid:
 
     def move(self, movement):
         if(movement == MV_LEFT):
+            # left movement: disallow all overlaps
             self.curr_block.posx -= 1
             self.draw_grid = self.superpose_grids()
         elif(movement == MV_RIGHT):
+            # right movement: disallow all overlaps
             self.curr_block.posx += 1
             self.draw_grid = self.superpose_grids()
         elif(movement == MV_DOWN):
+            # down movement: disallow all overlaps
+            #                freeze to grid the second time a movedown fails
             self.curr_block.posy -= 1
             if self.curr_block.posy < 0:
                 self.curr_block.posy = 0
@@ -41,6 +45,10 @@ class PtGrid:
                 self.new_block()
             else:
                 self.draw_grid = self.superpose_grids()
+        elif(movement == MV_ROTATE):
+            # rotation may produce overlaps initially but should try some
+            # move-left/move-right to resolve
+            None
 
     def superpose_grids(self):
         # create a new grid with same dimensions as game_grid
