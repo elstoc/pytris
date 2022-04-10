@@ -45,6 +45,19 @@ class PtGrid:
         self.next_shape = self.bf.new_shape()
         return self.curr_shape
 
+    def freeze_shape(self, shape):
+        """freeze shape to grid
+           remove completed grid rows
+           create new shape"""
+        self.active_grid = self.superpose_shape(shape)
+        
+        for y in reversed(range(self.height)):
+            if (all(self.active_grid[y])):
+                    del self.active_grid[y]
+                    self.active_grid.append([0 for x in range(self.width)])
+
+        self.new_shape()
+
     def move(self, movement):
         try_shape = copy.deepcopy(self.curr_shape)
         if(movement == MV_LEFT):
@@ -78,8 +91,7 @@ class PtGrid:
             except:
                 print("can't move down")
                 if(self.fail_down):
-                    self.active_grid = self.superpose_shape(self.curr_shape)
-                    self.new_shape()
+                    self.freeze_shape(self.curr_shape)
                     self.fail_down = False
                 else:
                     self.fail_down = True
@@ -90,6 +102,9 @@ class PtGrid:
         elif(movement == MV_ROTATE):
             # rotation may produce overlaps initially but should try some
             # move-left/move-right to resolve
+            # 4x4 shapes may need to move two spaces
+            # 3x3 shapes may need to move one space
+            # 2x2 shapes are symmetrical so will always pass
             try:
                 try_shape.rotate()
                 self.superpose_shape(try_shape)
@@ -101,6 +116,8 @@ class PtGrid:
                 return True
 
     def superpose_shape(self, shape):
+        """return a matrix that superposes the shape on the game grid
+           error if overlaps are found"""
         # create a new grid with same dimensions as game_grid
         target_grid = copy.deepcopy(self.active_grid)
         shape_grid = shape.list()
@@ -135,6 +152,8 @@ class PtGrid:
         return target_grid
 
     def list(self):
+        """return a matrix representing the current shape
+        overlaid on the current game grid"""
         return self.superpose_shape(self.curr_shape)
 
     def __str__(self):
