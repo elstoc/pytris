@@ -1,5 +1,5 @@
 from functools import reduce
-from PtColours import colours
+from PtConsts import *
 import random
 
 class PtBlock:
@@ -10,7 +10,7 @@ class PtBlock:
 
         self._variants = variants
         self.rotation = random.randrange(4)
-        self.colour = random.randrange(1, len(colours))
+        self.colour = random.randrange(1, len(COLOURS))
         self.width = len(variants[0][0])
         self.posx = self.posy = 0
 

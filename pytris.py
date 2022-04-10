@@ -4,7 +4,7 @@ import random
 
 from PtBlockFactory import PtBlockFactory
 from PtGrid import PtGrid
-from PtColours import colours
+from PtConsts import *
 
 import sys, pygame
 pygame.init()
@@ -28,20 +28,20 @@ while 1:
         if event.type == pygame.QUIT: sys.exit()
         if event.type == pygame.KEYUP:
             if event.key == K_LEFT:
-                game_grid.move_left()
+                game_grid.move(MV_LEFT)
                 draw = True
                 break
             elif event.key == K_RIGHT:
-                game_grid.move_right()
+                game_grid.move(MV_RIGHT)
                 draw = True
                 break
             elif event.key == K_DOWN:
-                game_grid.move_down()
+                game_grid.move(MV_DOWN)
                 draw = True
 
     if not counter % speed:
         # move down and create a new block if hitting the bottom
-        game_grid.move_down()
+        game_grid.move(MV_DOWN)
         draw = True
 
     if draw:
@@ -55,7 +55,7 @@ while 1:
         for x in range(len(grid_to_draw[0])):
             for y in range(len(grid_to_draw)):
                 if grid_to_draw[y][x]:
-                    unit_square.fill(colours[grid_to_draw[y][x]])
+                    unit_square.fill(COLOURS[grid_to_draw[y][x]])
                     grid_surf.blit(unit_square, (x*unit_size, y*unit_size))
 
         # draw the grid and then flip it because we use inverted coords

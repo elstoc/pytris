@@ -1,6 +1,7 @@
 from functools import reduce
 import copy
 from PtBlockFactory import PtBlockFactory
+from PtConsts import *
 
 class PtGrid:
     """The pytris game grid (default/minimum 10x20; maximum 50x50)"""
@@ -24,23 +25,22 @@ class PtGrid:
         self.next_block = self.bf.new_block()
         return self.curr_block
 
-    def move_left(self):
-        self.curr_block.posx -= 1
-        self.draw_grid = self.superpose_grids()
-
-    def move_right(self):
-        self.curr_block.posx += 1
-        self.draw_grid = self.superpose_grids()
-
-    def move_down(self):
-        self.curr_block.posy -= 1
-        if self.curr_block.posy < 0:
-            self.curr_block.posy = 0
-            self.active_grid = self.superpose_grids()
-            self.draw_grid = self.active_grid
-            self.new_block()
-        else:
+    def move(self, movement):
+        if(movement == MV_LEFT):
+            self.curr_block.posx -= 1
             self.draw_grid = self.superpose_grids()
+        elif(movement == MV_RIGHT):
+            self.curr_block.posx += 1
+            self.draw_grid = self.superpose_grids()
+        elif(movement == MV_DOWN):
+            self.curr_block.posy -= 1
+            if self.curr_block.posy < 0:
+                self.curr_block.posy = 0
+                self.active_grid = self.superpose_grids()
+                self.draw_grid = self.active_grid
+                self.new_block()
+            else:
+                self.draw_grid = self.superpose_grids()
 
     def superpose_grids(self):
         # create a new grid with same dimensions as game_grid
