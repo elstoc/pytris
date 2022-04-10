@@ -1,5 +1,5 @@
 import sys, pygame
-from pygame import locals
+from pygame.locals import *
 import random
 
 from PtBlockFactory import PtBlockFactory
@@ -27,15 +27,15 @@ while 1:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
         if event.type == pygame.KEYUP:
-            if event.key == locals.K_LEFT:
+            if event.key == K_LEFT:
                 game_grid.move_left()
                 draw = True
                 break
-            elif event.key == locals.K_RIGHT:
+            elif event.key == K_RIGHT:
                 game_grid.move_right()
                 draw = True
                 break
-            elif event.key == locals.K_DOWN:
+            elif event.key == K_DOWN:
                 game_grid.move_down()
                 draw = True
 

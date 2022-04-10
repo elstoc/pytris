@@ -19,23 +19,23 @@ class PtGrid:
 
     def new_block(self):
         self.curr_block = self.next_block
-        self.posx = int(self.width/2) - int(self.curr_block.width/2)
-        self.posy = self.height
+        self.curr_block.posx = int(self.width/2) - int(self.curr_block.width/2)
+        self.curr_block.posy = self.height
         self.next_block = self.bf.new_block()
         return self.curr_block
 
     def move_left(self):
-        self.posx -= 1
+        self.curr_block.posx -= 1
         self.draw_grid = self.superpose_grids()
 
     def move_right(self):
-        self.posx += 1
+        self.curr_block.posx += 1
         self.draw_grid = self.superpose_grids()
 
     def move_down(self):
-        self.posy -= 1
-        if self.posy < 0:
-            self.posy = 0
+        self.curr_block.posy -= 1
+        if self.curr_block.posy < 0:
+            self.curr_block.posy = 0
             self.active_grid = self.superpose_grids()
             self.draw_grid = self.active_grid
             self.new_block()
@@ -52,10 +52,10 @@ class PtGrid:
 
         for y in range(blockheight):
             for x in range(blockwidth):
-                if( self.posy+y <= self.height-1 
-                        and self.posx+x <= self.width-1
+                if( self.curr_block.posy+y <= self.height-1 
+                        and self.curr_block.posx+x <= self.width-1
                         and self.curr_block.get_block_array()[y][x]):
-                    target_grid[self.posy+y][self.posx+x] = self.curr_block.get_block_array()[y][x]
+                    target_grid[self.curr_block.posy+y][self.curr_block.posx+x] = self.curr_block.get_block_array()[y][x]
 
         return target_grid
 
