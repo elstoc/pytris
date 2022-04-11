@@ -9,7 +9,7 @@ class PtShape:
     def __init__(self, variants):
 
         self._variants = variants
-        self.rotation = random.randrange(4)
+        self.rotation = 0
         self.colour = random.randrange(1, len(COLOURS))
         self.width = len(variants[0][0])
         self.posx = self.posy = 0
