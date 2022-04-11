@@ -64,10 +64,23 @@ class PtShapeFactory:
 
             self._shape_variants.append(variants)
 
+        # initialise the form history
+        # avoid the "S" and "Z" shapes to start
+        self._form_hist = [2,3,2,3]
+
     def new_shape(self):
-        """return a random shape to the caller"""
-        num_forms = len(self._base_forms)
-        form = random.randrange(num_forms)
+        """return a pseudo-random shape to the caller
+           4 piece history with 4 rolls
+           see https://simon.lc/the-history-of-tetris-randomizers"""
+        form = 0
+        for i in range(4):
+            # four attempts to choose a shape that doesn't appear in the history
+            # if the first three attempts fail always choose the fourth shape
+            form = random.randrange(len(self._base_forms))
+            if form not in self._form_hist: break
+        del self._form_hist[0]
+        self._form_hist.append(form)
+
         shape =  PtShape(self._shape_variants[form])
         return shape
 
