@@ -118,7 +118,7 @@ class PtGrid:
                         # not a problem but avoid out-of-range on following line
                         pass
                     elif (target_grid[shape.posy+y][shape.posx+x]):
-                        if (x <= shapewidth/2):
+                        if (x < shapewidth/2):
                             raise PtOverlapLeft
                         elif (x > shapewidth/2):
                             raise PtOverlapRight
@@ -141,6 +141,6 @@ class PtGrid:
     def __repr__(self):
         return '\n'.join([
             reduce(lambda x,y: x + str(y), x, '') 
-                for x in self.grid])
+                for x in self.list()])
 
 
