@@ -114,10 +114,8 @@ class PtGrid:
                         raise PtOffGridLeft
                     elif (shape.posx + x > self.width - 1):
                         raise PtOffGridRight
-                    elif (shape.posy + y > self.height -1):
-                        # not a problem but avoid out-of-range on following line
-                        pass
-                    elif (target_grid[shape.posy+y][shape.posx+x]):
+                    elif (not(shape.posy + y > self.height -1)
+                            and target_grid[shape.posy+y][shape.posx+x]):
                         if (x < shapewidth/2):
                             raise PtOverlapLeft
                         elif (x > shapewidth/2):
