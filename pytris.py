@@ -71,7 +71,7 @@ while 1:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
             sys.exit()
-        elif (event.type == pygame.KEYDOWN and event.key in (K_RIGHT, K_LEFT, K_DOWN, K_UP)):
+        elif (event.type == pygame.KEYDOWN and event.key in (K_RIGHT, K_LEFT, K_DOWN, K_UP, K_SPACE)):
             keys_pressed.append(event.key)
         elif (event.type == game_tick):
             keys_pressed.append(K_DOWN)
@@ -84,7 +84,9 @@ while 1:
         if keyp == K_UP:
             draw = draw or game_grid.move(MV_ROTATE)
 
-    if K_DOWN in keys_pressed:
+    if K_SPACE in keys_pressed:
+        draw = draw or game_grid.move(MV_DROP)
+    elif K_DOWN in keys_pressed:
         draw = draw or game_grid.move(MV_DOWN)
 
     pygame.time.wait(1)

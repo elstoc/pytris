@@ -15,6 +15,7 @@ class PtShape:
         self.posx = self.posy = 0
 
     def move(self, movement):
+        print(movement)
         if(movement == MV_LEFT):
             self.posx -= 1
         elif(movement == MV_RIGHT):

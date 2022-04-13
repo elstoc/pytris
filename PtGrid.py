@@ -64,12 +64,12 @@ class PtGrid:
         moved = False
         extra_move = extra_move_count = 0
 
-        try_shape = copy.deepcopy(self.curr_shape)
-        move = req_movement
+        move = MV_DOWN if req_movement == MV_DROP else req_movement
 
         while True:
-            try_shape.move(extra_move if extra_move else move)
             try:
+                try_shape = copy.deepcopy(self.curr_shape)
+                try_shape.move(extra_move if extra_move else move)
                 self.superpose_shape(try_shape)
             except Exception as e:
                 if (req_movement == MV_ROTATE):
@@ -96,11 +96,14 @@ class PtGrid:
             else:
                 self.curr_shape = try_shape
                 moved = True
-                break
+                if(req_movement != MV_DROP):
+                    # for MV_DROP, keep repeating down moves
+                    # only breaking when move fails
+                    break
 
         if moved:
             return True
-        elif req_movement == MV_DOWN:
+        elif req_movement in (MV_DOWN, MV_DROP):
             try:
                 self.freeze_shape(self.curr_shape)
                 # check if new shape initially fits on grid
