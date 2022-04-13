@@ -44,6 +44,7 @@ while 1:
             for y in range(len(grid_to_draw)):
                 if grid_to_draw[y][x]:
                     unit_square.fill(COLOURS[grid_to_draw[y][x]])
+                    pygame.draw.rect(unit_square, COLOURS[0], unit_square.get_rect(), width=1)
                     grid_surf.blit(unit_square, (x*unit_size, y*unit_size))
 
         next_surf = pygame.Surface((4*unit_size, 4*unit_size))
@@ -51,6 +52,7 @@ while 1:
         for x in range(len(next_matrix[0])):
             for y in range(len(next_matrix)):
                 unit_square.fill(COLOURS[next_matrix[y][x]])
+                pygame.draw.rect(unit_square, COLOURS[0], unit_square.get_rect(), width=1)
                 next_surf.blit(unit_square, (x*unit_size, y*unit_size))
 
         screen_surf = pygame.Surface((screen_width, screen_height))
