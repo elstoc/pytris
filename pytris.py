@@ -23,10 +23,12 @@ game_height = screen_height
 screen = pygame.display.set_mode((screen_width,screen_height))
 
 unit_square = pygame.Surface((unit_size,unit_size))
-counter = 1
 speed = 50 # lower is faster
 draw = True
 pygame.key.set_repeat(200, 150)
+
+game_tick = pygame.USEREVENT + 0
+pygame.time.set_timer(game_tick, 400)
 
 while 1:
     # quit gracefully
@@ -63,26 +65,24 @@ while 1:
 
     draw = False
 
-    if not counter % speed:
-        draw = game_grid.move(MV_DOWN)
-
     keys_pressed = []
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
             sys.exit()
         elif (event.type == pygame.KEYDOWN and event.key in (K_RIGHT, K_LEFT, K_DOWN, K_UP)):
             keys_pressed.append(event.key)
+        elif (event.type == game_tick):
+            keys_pressed.append(K_DOWN)
 
     for keyp in keys_pressed:
         if keyp == K_RIGHT:
             draw = draw or game_grid.move(MV_RIGHT)
         if keyp == K_LEFT:
             draw = draw or game_grid.move(MV_LEFT)
-        if keyp == K_DOWN:
-            draw = draw or game_grid.move(MV_DOWN)
         if keyp == K_UP:
             draw = draw or game_grid.move(MV_ROTATE)
 
-    pygame.time.wait(10)
-    counter += 1
+    if K_DOWN in keys_pressed:
+        draw = draw or game_grid.move(MV_DOWN)
 
+    pygame.time.wait(1)
