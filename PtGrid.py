@@ -59,7 +59,6 @@ class PtGrid:
         """move a shape on the grid
         return True if the grid changed"""
         moved = False
-        finished = False
         extra_move = extra_move_count = 0
 
         try_shape = copy.deepcopy(self.curr_shape)
@@ -69,11 +68,20 @@ class PtGrid:
             try_shape.move(extra_move if extra_move else move)
             try:
                 self.superpose_shape(try_shape)
-            except (PtOverlapLeft, PtOffGridLeft):
+            except Exception as e:
                 if (req_movement == MV_ROTATE):
+                    # if shape initially overlaps on the left/right after rotation
+                    # then allow movements to the right/left to counteract
+                    # don't allow movements of more than half the shape width
                     if not extra_move:
                         extra_move_count = int(try_shape.width/2)
-                        extra_move = MV_RIGHT
+                        if type(e).__name__ in ("PtOverlapLeft", "PtOffGridLeft"):
+                            extra_move = MV_RIGHT
+                        elif type(e).__name__ in ("PtOverlapRight", "PtOffGridRight"):
+                            extra_move = MV_LEFT
+                        else:
+                            moved = False
+                            break
                     elif extra_move_count:
                         extra_move_count -= 1
                     else:
@@ -82,22 +90,6 @@ class PtGrid:
                 else:
                     moved = False
                     break
-            except (PtOverlapRight, PtOffGridRight):
-                if (req_movement == MV_ROTATE):
-                    if not extra_move:
-                        extra_move_count = int(try_shape.width/2)
-                        extra_move = MV_LEFT
-                    elif extra_move_count:
-                        extra_move_count -= 1
-                    else:
-                        moved = False
-                        break
-                else:
-                    moved = False
-                    break
-            except:
-                moved = False
-                break
             else:
                 self.curr_shape = try_shape
                 moved = True
