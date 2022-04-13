@@ -55,29 +55,58 @@ class PtGrid:
 
         self.new_shape()
 
-    def move(self, movement):
+    def move(self, req_movement):
         """move a shape on the grid
         return True if the grid changed"""
+        moved = False
+        finished = False
+        extra_move = extra_move_count = 0
+
         try_shape = copy.deepcopy(self.curr_shape)
-        try_shape.move(movement)
-        try:
-            self.superpose_shape(try_shape)
-        except:
-            if (movement == MV_DOWN):
-                self.freeze_shape(self.curr_shape)
-                return True
-            elif(movement == MV_ROTATE):
-                # rotation may produce overlaps initially but should try some
-                # move-left/move-right to resolve
-                # 4x4 shapes may need to move two spaces
-                # 3x3 shapes may need to move one space
-                # 2x2 shapes are symmetrical so will always pass
-                print("can't rotate")
-                return False
+        move = req_movement
+
+        while True:
+            try_shape.move(extra_move if extra_move else move)
+            try:
+                self.superpose_shape(try_shape)
+            except (PtOverlapLeft, PtOffGridLeft):
+                if (req_movement == MV_ROTATE):
+                    if not extra_move:
+                        extra_move_count = int(try_shape.width/2)
+                        extra_move = MV_RIGHT
+                    elif extra_move_count:
+                        extra_move_count -= 1
+                    else:
+                        moved = False
+                        break
+                else:
+                    moved = False
+                    break
+            except (PtOverlapRight, PtOffGridRight):
+                if (req_movement == MV_ROTATE):
+                    if not extra_move:
+                        extra_move_count = int(try_shape.width/2)
+                        extra_move = MV_LEFT
+                    elif extra_move_count:
+                        extra_move_count -= 1
+                    else:
+                        moved = False
+                        break
+                else:
+                    moved = False
+                    break
+            except:
+                moved = False
+                break
             else:
-                return False
-        else:
-            self.curr_shape = try_shape
+                self.curr_shape = try_shape
+                moved = True
+                break
+
+        if moved:
+            return True
+        elif req_movement == MV_DOWN:
+            self.freeze_shape(self.curr_shape)
             return True
 
     def superpose_shape(self, shape):
