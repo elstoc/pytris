@@ -59,40 +59,26 @@ class PtGrid:
         """move a shape on the grid
         return True if the grid changed"""
         try_shape = copy.deepcopy(self.curr_shape)
-        if(movement == MV_LEFT):
-            try_shape.posx -= 1
-        elif(movement == MV_RIGHT):
-            try_shape.posx += 1
-        elif(movement == MV_DOWN):
-            try_shape.posy += 1
-
-        if (movement in (MV_LEFT, MV_RIGHT, MV_DOWN)):
-            try:
-                self.superpose_shape(try_shape)
-            except:
-                if (movement == MV_DOWN):
-                    self.freeze_shape(self.curr_shape)
-                    return True
-                else:
-                    return False
-            else:
-                self.curr_shape = try_shape
+        try_shape.move(movement)
+        try:
+            self.superpose_shape(try_shape)
+        except:
+            if (movement == MV_DOWN):
+                self.freeze_shape(self.curr_shape)
                 return True
-        elif(movement == MV_ROTATE):
-            # rotation may produce overlaps initially but should try some
-            # move-left/move-right to resolve
-            # 4x4 shapes may need to move two spaces
-            # 3x3 shapes may need to move one space
-            # 2x2 shapes are symmetrical so will always pass
-            try_shape.rotate()
-            try:
-                self.superpose_shape(try_shape)
-            except:
+            elif(movement == MV_ROTATE):
+                # rotation may produce overlaps initially but should try some
+                # move-left/move-right to resolve
+                # 4x4 shapes may need to move two spaces
+                # 3x3 shapes may need to move one space
+                # 2x2 shapes are symmetrical so will always pass
                 print("can't rotate")
                 return False
             else:
-                self.curr_shape = try_shape
-                return True
+                return False
+        else:
+            self.curr_shape = try_shape
+            return True
 
     def superpose_shape(self, shape):
         """return a matrix that superposes the shape on the game grid

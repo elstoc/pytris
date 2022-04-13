@@ -14,9 +14,16 @@ class PtShape:
         self.width = self.height = len(variants[0][0])
         self.posx = self.posy = 0
 
-    def rotate(self, angle=1):
-        """rotate the shape clockwise by angle * 90 degrees"""
-        self.rotation = (self.rotation + angle) % 4
+    def move(self, movement):
+        if(movement == MV_LEFT):
+            self.posx -= 1
+        elif(movement == MV_RIGHT):
+            self.posx += 1
+        elif(movement == MV_DOWN):
+            self.posy += 1
+        elif(movement == MV_ROTATE):
+            """rotate the shape clockwise by angle * 90 degrees"""
+            self.rotation = (self.rotation + 1) % 4
 
     def list(self, rotation = -1):
         # return the array representing the correct rotational variant
