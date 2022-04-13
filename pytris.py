@@ -69,7 +69,8 @@ while 1:
 
     keys_pressed = []
     for event in pygame.event.get():
-        if event.type == pygame.QUIT: 
+        if (event.type == pygame.QUIT 
+                or (event.type == pygame.KEYDOWN and event.key == K_q)): 
             sys.exit()
         elif (event.type == pygame.KEYDOWN and event.key in (K_RIGHT, K_LEFT, K_DOWN, K_UP, K_SPACE)):
             keys_pressed.append(event.key)
