@@ -53,12 +53,10 @@ while 1:
 
         screen_surf = pygame.Surface((screen_width, screen_height))
         screen_surf.blit(grid_surf, (info_width*unit_size,0))
-        screen_surf.blit(next_surf, (int(unit_size * (info_width - len(next_matrix[0]))/2),(grid_height-3)*unit_size))
+        screen_surf.blit(next_surf, (int(unit_size * (info_width - len(next_matrix[0]))/2),unit_size))
 
         # draw the grid and then flip it because we use inverted coords
         screen.blit(screen_surf, screen_surf.get_rect())
-        display_surface = pygame.display.get_surface()
-        display_surface.blit(pygame.transform.flip(display_surface, False, True), dest=(0, 0))
 
         # show the updated screen
         pygame.display.flip()

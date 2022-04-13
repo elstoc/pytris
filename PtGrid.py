@@ -38,7 +38,7 @@ class PtGrid:
     def new_shape(self):
         self.curr_shape = self.next_shape
         self.curr_shape.posx = int(self.width/2) - int(self.curr_shape.width/2)
-        self.curr_shape.posy = self.height - 1
+        self.curr_shape.posy = 1 - self.curr_shape.height
         self.next_shape = self.sfact.new_shape()
         return self.curr_shape
 
@@ -48,10 +48,10 @@ class PtGrid:
            create new shape"""
         self.active_grid = self.superpose_shape(shape)
         
-        for y in reversed(range(self.height)):
+        for y in range(self.height):
             if (all(self.active_grid[y])):
                     del self.active_grid[y]
-                    self.active_grid.append([0 for x in range(self.width)])
+                    self.active_grid.insert(0,[0 for x in range(self.width)])
 
         self.new_shape()
 
@@ -64,7 +64,7 @@ class PtGrid:
         elif(movement == MV_RIGHT):
             try_shape.posx += 1
         elif(movement == MV_DOWN):
-            try_shape.posy -= 1
+            try_shape.posy += 1
 
         if (movement in (MV_LEFT, MV_RIGHT, MV_DOWN)):
             try:
@@ -108,13 +108,13 @@ class PtGrid:
         for y in range(shapeheight):
             for x in range(shapewidth):
                 if(shape_grid[y][x]):
-                    if (shape.posy + y < 0):
+                    if (shape.posy + y >= self.height):
                         raise PtOffGridBottom
                     elif (shape.posx + x < 0):
                         raise PtOffGridLeft
                     elif (shape.posx + x > self.width - 1):
                         raise PtOffGridRight
-                    elif (not(shape.posy + y > self.height -1)
+                    elif (shape.posy + y > 0
                             and target_grid[shape.posy+y][shape.posx+x]):
                         if (x < shapewidth/2):
                             raise PtOverlapLeft
@@ -123,7 +123,7 @@ class PtGrid:
                         else:
                             raise PtOverlapBottom
 
-                    if (shape.posy + y <= self.height -1):
+                    if (shape.posy + y >= 0):
                         target_grid[shape.posy+y][shape.posx+x] = shape_grid[y][x]
 
         return target_grid

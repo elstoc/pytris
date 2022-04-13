@@ -11,7 +11,7 @@ class PtShape:
         self._variants = variants
         self.rotation = 0
         self.colour = random.randrange(1, len(COLOURS))
-        self.width = len(variants[0][0])
+        self.width = self.height = len(variants[0][0])
         self.posx = self.posy = 0
 
     def rotate(self, angle=1):
