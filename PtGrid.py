@@ -21,6 +21,9 @@ class PtOverlapRight(Exception):
 class PtOverlapBottom(Exception):
     pass
 
+class PtGameOver(Exception):
+    pass
+
 class PtGrid:
     """The pytris game grid (default/minimum 10x20; maximum 50x50)"""
     
@@ -98,7 +101,13 @@ class PtGrid:
         if moved:
             return True
         elif req_movement == MV_DOWN:
-            self.freeze_shape(self.curr_shape)
+            try:
+                self.freeze_shape(self.curr_shape)
+                # check if new shape initially fits on grid
+                # by attempting superposition
+                self.superpose_shape(self.curr_shape)
+            except:
+                raise PtGameOver
             return True
 
     def superpose_shape(self, shape):
@@ -121,7 +130,7 @@ class PtGrid:
                         raise PtOffGridLeft
                     elif (shape.posx + x > self.width - 1):
                         raise PtOffGridRight
-                    elif (shape.posy + y > 0
+                    elif (shape.posy + y >= 0
                             and target_grid[shape.posy+y][shape.posx+x]):
                         if (x < shapewidth/2):
                             raise PtOverlapLeft
