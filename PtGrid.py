@@ -103,12 +103,9 @@ class PtGrid:
         target_grid = copy.deepcopy(self.active_grid)
         shape_grid = shape.list()
 
-        # place the contents of shape_grid into game_grid
-        shapeheight = len(shape_grid)
-        shapewidth = len(shape_grid[0])
-
-        for y in range(shapeheight):
-            for x in range(shapewidth):
+        # place the contents of shape_grid into target_grid
+        for y in range(shape.height):
+            for x in range(shape.width):
                 if(shape_grid[y][x]):
                     if (shape.posy + y >= self.height):
                         raise PtOffGridBottom
@@ -118,9 +115,9 @@ class PtGrid:
                         raise PtOffGridRight
                     elif (shape.posy + y >= 0
                             and target_grid[shape.posy+y][shape.posx+x]):
-                        if (x < shapewidth/2):
+                        if (x < shape.width/2):
                             raise PtOverlapLeft
-                        elif (x > shapewidth/2):
+                        elif (x > shape.width/2):
                             raise PtOverlapRight
                         else:
                             raise PtOverlapBottom
