@@ -76,6 +76,8 @@ class PtGrid:
                     # then allow movements to the right/left to counteract
                     # don't allow movements of more than half the shape width
                     if not extra_move:
+                        # this is the first rotation failure
+                        # define allowed additional movements
                         extra_move_count = int(try_shape.width/2)
                         if type(e).__name__ in ("PtOverlapLeft", "PtOffGridLeft"):
                             extra_move = MV_RIGHT
@@ -84,8 +86,10 @@ class PtGrid:
                         else:
                             return False
                     elif extra_move_count:
+                        # decrement extra movements allowed until none left
                         extra_move_count -= 1
                     else:
+                        # we've tried everything, shape could not rotate
                         return False
                 else:
                     return False
