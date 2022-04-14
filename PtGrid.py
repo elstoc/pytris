@@ -21,9 +21,6 @@ class PtOverlapRight(Exception):
 class PtOverlapBottom(Exception):
     pass
 
-class PtGameOver(Exception):
-    pass
-
 class PtGrid:
     """The pytris game grid (default/minimum 10x20; maximum 50x50)"""
     
@@ -45,18 +42,20 @@ class PtGrid:
         self.next_shape = self.sfact.new_shape()
         return self.curr_shape
 
-    def freeze_shape(self, shape):
-        """freeze shape to grid
-           remove completed grid rows
-           create new shape"""
-        self.active_grid = self.superpose_shape(shape)
+    def freeze_shape(self):
+        """freeze shape to grid"""
+        self.active_grid = self.superpose_shape(self.curr_shape)
         
+    def remove_rows(self):
+        """remove completed rows"""
+        removed_rows = 0
         for y in range(self.height):
             if (all(self.active_grid[y])):
+                    removed_rows +=1
                     del self.active_grid[y]
                     self.active_grid.insert(0,[0 for x in range(self.width)])
 
-        self.new_shape()
+        return removed_rows
 
     def move(self, req_movement):
         """move a shape on the grid
@@ -83,35 +82,19 @@ class PtGrid:
                         elif type(e).__name__ in ("PtOverlapRight", "PtOffGridRight"):
                             extra_move = MV_LEFT
                         else:
-                            moved = False
-                            break
+                            return False
                     elif extra_move_count:
                         extra_move_count -= 1
                     else:
-                        moved = False
-                        break
+                        return False
                 else:
-                    moved = False
-                    break
+                    return False
             else:
                 self.curr_shape = try_shape
-                moved = True
                 if(req_movement != MV_DROP):
                     # for MV_DROP, keep repeating down moves
                     # only breaking when move fails
-                    break
-
-        if moved:
-            return True
-        elif req_movement in (MV_DOWN, MV_DROP):
-            try:
-                self.freeze_shape(self.curr_shape)
-                # check if new shape initially fits on grid
-                # by attempting superposition
-                self.superpose_shape(self.curr_shape)
-            except:
-                raise PtGameOver
-            return True
+                    return True
 
     def superpose_shape(self, shape):
         """return a matrix that superposes the shape on the game grid

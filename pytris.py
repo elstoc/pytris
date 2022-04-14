@@ -21,9 +21,12 @@ pygame.time.set_timer(game_tick, 400)
 
 game_screen.draw(game_grid)
 
+class PtGameOver(Exception):
+    pass
+
 while 1:
 
-    draw = False
+    moved = False
 
     keys_pressed = []
     for event in pygame.event.get():
@@ -37,17 +40,44 @@ while 1:
 
     for keyp in keys_pressed:
         if keyp == K_RIGHT:
-            draw = draw or game_grid.move(MV_RIGHT)
+            moved = moved or game_grid.move(MV_RIGHT)
         if keyp == K_LEFT:
-            draw = draw or game_grid.move(MV_LEFT)
+            moved = moved or game_grid.move(MV_LEFT)
         if keyp == K_UP:
-            draw = draw or game_grid.move(MV_ROTATE)
+            moved = moved or game_grid.move(MV_ROTATE)
 
+    if moved: game_screen.draw(game_grid)
+
+    moved = False
+    freeze = False
     if K_SPACE in keys_pressed:
-        draw = draw or game_grid.move(MV_DROP)
+        moved = True
+        freeze = True
+        game_grid.move(MV_DROP)
     elif K_DOWN in keys_pressed:
-        draw = draw or game_grid.move(MV_DOWN)
+        moved = game_grid.move(MV_DOWN)
+        if not moved: 
+            freeze = True
 
-    if draw: game_screen.draw(game_grid)
+    if moved or freeze:
+        game_screen.draw(game_grid)
+
+    if freeze:
+        game_grid.freeze_shape()
+        game_grid.new_shape()
+        rows_removed = game_grid.remove_rows()
+        if(rows_removed):
+            pygame.time.wait(400)
+            try:
+                # check if new shape initially fits on grid
+                # by attempting to list the new grid
+                game_grid.list()
+            except:
+                raise PtGameOver
+
+            game_screen.draw(game_grid)
+
+            # clear the event queue
+            pygame.event.get()
 
     pygame.time.wait(1)
