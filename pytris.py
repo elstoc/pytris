@@ -1,69 +1,27 @@
 import sys, pygame
 from pygame.locals import *
-import random
 
 from PtShapeFactory import PtShapeFactory
 from PtGrid import PtGrid
+from PtScreen import PtScreen
 from PtConsts import *
 
 import sys, pygame
 pygame.init()
 
-unit_size = 20
-grid_width = 10
-grid_height = 20
-info_width = 8
-game_grid = PtGrid(grid_width, grid_height)
+game_grid = PtGrid()
 
-screen_width = (grid_width+info_width)*unit_size
-screen_height = grid_height*unit_size
-game_width = grid_width*unit_size
-game_height = screen_height
+game_screen = PtScreen(game_grid)
 
-screen = pygame.display.set_mode((screen_width,screen_height))
-
-unit_square = pygame.Surface((unit_size,unit_size))
 speed = 50 # lower is faster
-draw = True
 pygame.key.set_repeat(200, 150)
 
 game_tick = pygame.USEREVENT + 0
 pygame.time.set_timer(game_tick, 400)
 
+game_screen.draw(game_grid)
+
 while 1:
-    # quit gracefully
-    if draw:
-        # get the game grid to be drawn this iteration
-        # and draw it
-        grid_to_draw = game_grid.list()
-        grid_surf = pygame.Surface((game_width,game_height))
-        grid_surf.fill((50,50,50))
-
-        # define a single unit_square and fill the game surface with grid unit_squares
-        for x in range(len(grid_to_draw[0])):
-            for y in range(len(grid_to_draw)):
-                if grid_to_draw[y][x]:
-                    unit_square.fill(COLOURS[grid_to_draw[y][x]])
-                    pygame.draw.rect(unit_square, COLOURS[0], unit_square.get_rect(), width=1)
-                    grid_surf.blit(unit_square, (x*unit_size, y*unit_size))
-
-        next_surf = pygame.Surface((4*unit_size, 4*unit_size))
-        next_matrix = game_grid.next_shape.list(0)
-        for x in range(len(next_matrix[0])):
-            for y in range(len(next_matrix)):
-                unit_square.fill(COLOURS[next_matrix[y][x]])
-                pygame.draw.rect(unit_square, COLOURS[0], unit_square.get_rect(), width=1)
-                next_surf.blit(unit_square, (x*unit_size, y*unit_size))
-
-        screen_surf = pygame.Surface((screen_width, screen_height))
-        screen_surf.blit(grid_surf, (info_width*unit_size,0))
-        screen_surf.blit(next_surf, (int(unit_size * (info_width - len(next_matrix[0]))/2),unit_size))
-
-        # draw the grid and then flip it because we use inverted coords
-        screen.blit(screen_surf, screen_surf.get_rect())
-
-        # show the updated screen
-        pygame.display.flip()
 
     draw = False
 
@@ -89,5 +47,7 @@ while 1:
         draw = draw or game_grid.move(MV_DROP)
     elif K_DOWN in keys_pressed:
         draw = draw or game_grid.move(MV_DOWN)
+
+    if draw: game_screen.draw(game_grid)
 
     pygame.time.wait(1)
