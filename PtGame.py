@@ -16,7 +16,6 @@ class PtGame:
         self.game_screen = PtScreen(self.game_grid)
         self.speed = 50 # lower is faster
         self.score = 0
-        self.set_tick()
 
     def set_tick(self):
         self.game_tick = pygame.USEREVENT + 0
@@ -24,6 +23,7 @@ class PtGame:
 
     def play(self):
         self.game_screen.draw(self.game_grid)
+        self.set_tick()
 
         try:
             while 1:
@@ -82,6 +82,9 @@ class PtGame:
 
                         # clear the event queue
                         pygame.event.get()
+
+                        # reset the timer for the new shape
+                        self.set_tick()
 
                 pygame.time.wait(1)
 
