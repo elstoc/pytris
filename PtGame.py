@@ -25,6 +25,10 @@ class PtGame:
         self.game_screen.draw(self.game_grid)
         self.set_tick()
 
+        # used to prevent a pair of drop movements in a row without
+        # an intervening game tick
+        allow_drop = True
+
         try:
             while 1:
                 moves = 0
@@ -38,6 +42,7 @@ class PtGame:
                         keys_pressed.append(event.key)
                     elif (event.type == self.game_tick):
                         keys_pressed.append(K_DOWN)
+                        allow_drop = True
 
                 for keyp in keys_pressed:
                     if keyp == K_RIGHT:
@@ -53,9 +58,10 @@ class PtGame:
                 moves = 0
                 freeze = False
 
-                if K_SPACE in keys_pressed:
+                if K_SPACE in keys_pressed and allow_drop:
                     freeze = True
                     moves = self.game_grid.move(MV_DROP)
+                    allow_drop = False
                 elif K_DOWN in keys_pressed:
                     moves = self.game_grid.move(MV_DOWN)
                     if not moves: 
