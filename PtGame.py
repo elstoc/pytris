@@ -75,16 +75,15 @@ class PtGame:
                     self.score += rows_removed
                     if(rows_removed):
                         pygame.time.wait(400)
-                        try:
-                            self.game_screen.draw(self.game_grid)
-                        except:
-                            raise PtGameOver
+                    try:
+                        self.game_screen.draw(self.game_grid)
+                    except:
+                        raise PtGameOver
 
-                        # clear the event queue
-                        pygame.event.get()
-
-                        # reset the timer for the new shape
-                        self.set_tick()
+                    # reset the timer for the new shape
+                    self.set_tick()
+                    # clear the event queue
+                    pygame.event.get()
 
                 pygame.time.wait(1)
 
