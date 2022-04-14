@@ -40,7 +40,6 @@ class PtGrid:
         self.curr_shape.posx = int(self.width/2) - int(self.curr_shape.width/2)
         self.curr_shape.posy = 1 - self.curr_shape.height
         self.next_shape = self.sfact.new_shape()
-        return self.curr_shape
 
     def freeze_shape(self):
         """freeze shape to grid"""
