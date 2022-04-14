@@ -58,16 +58,17 @@ class PtGrid:
 
     def move(self, req_movement):
         """move a shape on the grid
-        return True if the grid changed"""
-        moved = False
+        return True if the last move succeeded"""
         extra_move = extra_move_count = 0
 
-        move = MV_DOWN if req_movement == MV_DROP else req_movement
+        # the movement passed to the shape will never be MV_DROP
+        # but merely repeated MV_DOWNs
+        shape_move = MV_DOWN if req_movement == MV_DROP else req_movement
 
+        try_shape = copy.deepcopy(self.curr_shape)
         while True:
             try:
-                try_shape = copy.deepcopy(self.curr_shape)
-                try_shape.move(extra_move if extra_move else move)
+                try_shape.move(extra_move if extra_move else shape_move)
                 self.superpose_shape(try_shape)
             except Exception as e:
                 if (req_movement == MV_ROTATE):
@@ -90,9 +91,11 @@ class PtGrid:
                     return False
             else:
                 self.curr_shape = try_shape
-                if(req_movement != MV_DROP):
+                if(req_movement == MV_DROP):
                     # for MV_DROP, keep repeating down moves
-                    # only breaking when move fails
+                    # only returning on the final (failing) movement
+                    try_shape = copy.deepcopy(self.curr_shape)
+                else:
                     return True
 
     def superpose_shape(self, shape):
