@@ -60,6 +60,7 @@ class PtGrid:
         """move a shape on the grid
         return True if the last move succeeded"""
         extra_move = extra_move_count = 0
+        num_moves = 0
 
         # the movement passed to the shape will never be MV_DROP
         # but merely repeated MV_DOWNs
@@ -84,23 +85,24 @@ class PtGrid:
                         elif type(e).__name__ in ("PtOverlapRight", "PtOffGridRight"):
                             extra_move = MV_LEFT
                         else:
-                            return False
+                            return num_moves
                     elif extra_move_count:
                         # decrement extra movements allowed until none left
                         extra_move_count -= 1
                     else:
                         # we've tried everything, shape could not rotate
-                        return False
+                        return num_moves
                 else:
-                    return False
+                    return num_moves
             else:
                 self.curr_shape = try_shape
                 if(req_movement == MV_DROP):
                     # for MV_DROP, keep repeating down moves
                     # only returning on the final (failing) movement
                     try_shape = copy.deepcopy(self.curr_shape)
+                    num_moves += 1
                 else:
-                    return True
+                    return num_moves + 1
 
     def superpose_shape(self, shape):
         """return a matrix that superposes the shape on the game grid

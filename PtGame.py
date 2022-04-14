@@ -27,7 +27,7 @@ class PtGame:
 
         try:
             while 1:
-                moved = False
+                moves = 0
                 keys_pressed = []
 
                 for event in pygame.event.get():
@@ -41,28 +41,27 @@ class PtGame:
 
                 for keyp in keys_pressed:
                     if keyp == K_RIGHT:
-                        moved = moved or self.game_grid.move(MV_RIGHT)
+                        moves += self.game_grid.move(MV_RIGHT)
                     if keyp == K_LEFT:
-                        moved = moved or self.game_grid.move(MV_LEFT)
+                        moves += self.game_grid.move(MV_LEFT)
                     if keyp == K_UP:
-                        moved = moved or self.game_grid.move(MV_ROTATE)
+                        moves += self.game_grid.move(MV_ROTATE)
 
-                if moved: 
+                if moves: 
                     self.game_screen.draw(self.game_grid)
 
-                moved = False
+                moves = 0
                 freeze = False
 
                 if K_SPACE in keys_pressed:
-                    moved = True
                     freeze = True
-                    self.game_grid.move(MV_DROP)
+                    moves = self.game_grid.move(MV_DROP)
                 elif K_DOWN in keys_pressed:
-                    moved = self.game_grid.move(MV_DOWN)
-                    if not moved: 
+                    moves = self.game_grid.move(MV_DOWN)
+                    if not moves: 
                         freeze = True
 
-                if moved or freeze:
+                if moves or freeze:
                     try:
                         self.game_screen.draw(self.game_grid)
                     except:
