@@ -19,10 +19,6 @@ class PtShapeFactory:
 
         self._shapes.append([shape0, shape0, shape0, shape0])
 
-        shape1 = [[0,0,0],
-                  [0,0,0],
-                  [0,0,0]]
-
         shape0 = [[0,0,0],
                   [1,1,1],
                   [0,1,0]]
