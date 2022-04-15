@@ -22,11 +22,20 @@ class PtGame:
         self.game_tick = pygame.USEREVENT + 0
         pygame.time.set_timer(self.game_tick, 400 - self.level*15)
 
-    def update_level(self):
+    def update_stats(self, rows_removed, num_down_moves):
+        self.row_removals += rows_removed
+
+        # increase score by level * multiplier
+        rows_multiplier = [0, 100, 300, 500, 800]
+        self.score += self.level * rows_multiplier[rows_removed]
+
+        # for hard-drops add 2 points per cell dropped
+        if rows_removed and num_down_moves > 1:
+            self.score += 2 * num_down_moves
+
         # level starts at 1 and increases every 10 clearances
         # maxes out at level 20
         # but can be initiated at a higher level
-        old_level = self.level
         self.level = min(20, max(self.level, (self.row_removals+10) // 10))
 
     def play(self):
@@ -83,11 +92,9 @@ class PtGame:
 
                 if freeze:
                     self.board.freeze_shape()
-                    self.board.new_shape()
                     rows_removed = self.board.remove_rows()
-                    self.score += rows_removed
-                    self.row_removals += rows_removed
-                    self.update_level()
+                    self.update_stats(rows_removed, moves)
+                    self.board.new_shape()
                     if(rows_removed):
                         pygame.time.wait(400)
                     try:
