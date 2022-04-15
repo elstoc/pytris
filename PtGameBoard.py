@@ -111,6 +111,7 @@ class PtGameBoard:
         grid_out = copy.deepcopy(self.grid)
 
         # attempt to place the shape on the grid
+        # error if shape overlaps a populated square or is off grid
         for y in range(shape.height):
             for x in range(shape.width):
                 if(shape.list()[y][x]):
@@ -129,7 +130,7 @@ class PtGameBoard:
                         else:
                             raise PtOverlapBottom
 
-                    if (shape.posy + y >= 0):
+                    if (shape.posy + y >= 0):   # ignore squares above the top of the grid
                         grid_out[shape.posy+y][shape.posx+x] = shape.list()[y][x]
 
         return grid_out
