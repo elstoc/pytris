@@ -43,14 +43,16 @@ class PtScreen:
                 pygame.draw.rect(self.unit_square, BLACK, self.unit_square.get_rect(), width=1)
                 next_surf.blit(self.unit_square, (x*self.unit_size_px, y*self.unit_size_px))
 
-        # draw the current score
-        self.score_no = self.font.render("score: " + str(game.score), True, WHITE)
+        # draw the current score and level
+        self.score_text = self.font.render("SCORE: " + str(game.score), True, WHITE)
+        self.level_text  = self.font.render("LEVEL: " + str(game.level), True, WHITE)
 
         # now blit everything to the screen surface
         screen_surf = pygame.Surface((self.width_px, self.height_px))
         screen_surf.blit(board_grid_surf, (self.info_width*self.unit_size_px,0))
         screen_surf.blit(next_surf, (int(self.unit_size_px * (self.info_width - len(next_matrix[0]))/2),self.unit_size_px))
-        screen_surf.blit(self.score_no, (int(self.unit_size_px/4),self.height_px - self.unit_size_px))
+        screen_surf.blit(self.score_text, (int(self.unit_size_px/4), self.height_px - self.unit_size_px))
+        screen_surf.blit(self.level_text, (int(self.unit_size_px/4), self.height_px - 2*self.unit_size_px))
 
         self.screen.blit(screen_surf, screen_surf.get_rect())
 

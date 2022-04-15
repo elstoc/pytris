@@ -16,6 +16,7 @@ class PtGame:
         self.game_screen = PtScreen(self.board)
         self.speed = 50 # lower is faster
         self.score = 0
+        self.level = 0
 
     def set_tick(self):
         self.game_tick = pygame.USEREVENT + 0
