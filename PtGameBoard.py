@@ -21,7 +21,7 @@ class PtOverlapRight(Exception):
 class PtOverlapBottom(Exception):
     pass
 
-class PtGrid:
+class PtGameBoard:
     """The pytris game grid (default/minimum 10x20; maximum 50x50)"""
     
     def __init__(self, width=10, height=20):
@@ -30,7 +30,7 @@ class PtGrid:
         self.width = min(max(10, width),50)
         self.height = min(max(20, height),50)
 
-        self.active_grid = [[0 for x in range(self.width)] for y in range(self.height)]
+        self.grid = [[0 for x in range(self.width)] for y in range(self.height)]
 
         self.next_shape = self.sfact.new_shape()
         self.new_shape()
@@ -43,20 +43,20 @@ class PtGrid:
 
     def freeze_shape(self):
         """freeze shape to grid"""
-        self.active_grid = self.superpose_shape(self.curr_shape)
+        self.grid = self.superpose_shape(self.curr_shape)
         
     def remove_rows(self):
         """remove completed rows"""
         removed_rows = 0
         for y in range(self.height):
-            if (all(self.active_grid[y])):
+            if (all(self.grid[y])):
                     removed_rows +=1
-                    del self.active_grid[y]
-                    self.active_grid.insert(0,[0 for x in range(self.width)])
+                    del self.grid[y]
+                    self.grid.insert(0,[0 for x in range(self.width)])
 
         return removed_rows
 
-    def move(self, req_movement):
+    def move_shape(self, req_movement):
         """move a shape on the grid
         return True if the last move succeeded"""
         extra_move = extra_move_count = 0
@@ -108,13 +108,12 @@ class PtGrid:
         """return a matrix that superposes the shape on the game grid
            error if overlaps are found"""
         # create a new grid with same dimensions as game_grid
-        target_grid = copy.deepcopy(self.active_grid)
-        shape_grid = shape.list()
+        grid_out = copy.deepcopy(self.grid)
 
-        # place the contents of shape_grid into target_grid
+        # attempt to place the shape on the grid
         for y in range(shape.height):
             for x in range(shape.width):
-                if(shape_grid[y][x]):
+                if(shape.list()[y][x]):
                     if (shape.posy + y >= self.height):
                         raise PtOffGridBottom
                     elif (shape.posx + x < 0):
@@ -122,7 +121,7 @@ class PtGrid:
                     elif (shape.posx + x > self.width - 1):
                         raise PtOffGridRight
                     elif (shape.posy + y >= 0
-                            and target_grid[shape.posy+y][shape.posx+x]):
+                            and grid_out[shape.posy+y][shape.posx+x]):
                         if (x < shape.width/2):
                             raise PtOverlapLeft
                         elif (x > shape.width/2):
@@ -131,9 +130,9 @@ class PtGrid:
                             raise PtOverlapBottom
 
                     if (shape.posy + y >= 0):
-                        target_grid[shape.posy+y][shape.posx+x] = shape_grid[y][x]
+                        grid_out[shape.posy+y][shape.posx+x] = shape.list()[y][x]
 
-        return target_grid
+        return grid_out
 
     def list(self):
         """return a matrix representing the current shape

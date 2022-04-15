@@ -2,7 +2,7 @@ import sys, pygame
 from pygame.locals import *
 
 from PtShapeFactory import PtShapeFactory
-from PtGrid import PtGrid
+from PtGameBoard import PtGameBoard
 from PtScreen import PtScreen
 from PtConsts import *
 
@@ -12,8 +12,8 @@ class PtGameOver(Exception):
 class PtGame:
 
     def __init__(self):
-        self.game_grid = PtGrid()
-        self.game_screen = PtScreen(self.game_grid)
+        self.board = PtGameBoard()
+        self.game_screen = PtScreen(self.board)
         self.speed = 50 # lower is faster
         self.score = 0
 
@@ -22,7 +22,7 @@ class PtGame:
         pygame.time.set_timer(self.game_tick, self.speed * 8)
 
     def play(self):
-        self.game_screen.draw(self.game_grid)
+        self.game_screen.draw(self.board)
         self.set_tick()
 
         # used to prevent a pair of drop movements in a row without
@@ -46,42 +46,42 @@ class PtGame:
 
                 for keyp in keys_pressed:
                     if keyp == K_RIGHT:
-                        moves += self.game_grid.move(MV_RIGHT)
+                        moves += self.board.move_shape(MV_RIGHT)
                     if keyp == K_LEFT:
-                        moves += self.game_grid.move(MV_LEFT)
+                        moves += self.board.move_shape(MV_LEFT)
                     if keyp == K_UP:
-                        moves += self.game_grid.move(MV_ROTATE)
+                        moves += self.board.move_shape(MV_ROTATE)
 
                 if moves: 
-                    self.game_screen.draw(self.game_grid)
+                    self.game_screen.draw(self.board)
 
                 moves = 0
                 freeze = False
 
                 if K_SPACE in keys_pressed and allow_drop:
                     freeze = True
-                    moves = self.game_grid.move(MV_DROP)
+                    moves = self.board.move_shape(MV_DROP)
                     allow_drop = False
                 elif K_DOWN in keys_pressed:
-                    moves = self.game_grid.move(MV_DOWN)
+                    moves = self.board.move_shape(MV_DOWN)
                     if not moves: 
                         freeze = True
 
                 if moves or freeze:
                     try:
-                        self.game_screen.draw(self.game_grid)
+                        self.game_screen.draw(self.board)
                     except:
                         raise PtGameOver
 
                 if freeze:
-                    self.game_grid.freeze_shape()
-                    self.game_grid.new_shape()
-                    rows_removed = self.game_grid.remove_rows()
+                    self.board.freeze_shape()
+                    self.board.new_shape()
+                    rows_removed = self.board.remove_rows()
                     self.score += rows_removed
                     if(rows_removed):
                         pygame.time.wait(400)
                     try:
-                        self.game_screen.draw(self.game_grid)
+                        self.game_screen.draw(self.board)
                     except:
                         raise PtGameOver
 

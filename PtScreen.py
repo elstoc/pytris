@@ -1,7 +1,6 @@
 import sys, pygame
 from pygame.locals import *
 
-from PtGrid import PtGrid
 from PtConsts import *
 
 class PtScreen:
