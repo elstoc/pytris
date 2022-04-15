@@ -13,8 +13,7 @@ class PtScreen:
         self.game_width = board.width*unit_size
         self.game_height = self.screen_height
 
-        self.font = pygame.font.SysFont('Hack-Regular.ttf', 24)
-        self.score_text = self.font.render('score:', True, (255,255,255))
+        self.font = pygame.font.SysFont('Hack-Regular.ttf', 20)
         self.screen = pygame.display.set_mode((self.screen_width,self.screen_height))
 
 
@@ -45,14 +44,13 @@ class PtScreen:
                 pygame.draw.rect(unit_square, COLOURS[0], unit_square.get_rect(), width=1)
                 next_surf.blit(unit_square, (x*self.unit_size, y*self.unit_size))
 
-        self.score_no = self.font.render(str(game.score), True, (255,255,255))
+        self.score_no = self.font.render("score: " + str(game.score), True, (255,255,255))
 
         # now draw the screen
         screen_surf = pygame.Surface((self.screen_width, self.screen_height))
         screen_surf.blit(grid_surf, (self.info_width*self.unit_size,0))
         screen_surf.blit(next_surf, (int(self.unit_size * (self.info_width - len(next_matrix[0]))/2),self.unit_size))
-        screen_surf.blit(self.score_text, (self.unit_size,6*self.unit_size))
-        screen_surf.blit(self.score_no, (self.unit_size,7*self.unit_size))
+        screen_surf.blit(self.score_no, (int(self.unit_size/4),self.screen_height - self.unit_size))
 
         # draw the grid and then flip it because we use inverted coords
         self.screen.blit(screen_surf, screen_surf.get_rect())
