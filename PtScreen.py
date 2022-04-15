@@ -5,7 +5,7 @@ from PtGrid import PtGrid
 from PtConsts import *
 
 class PtScreen:
-    def __init__(self, game_grid, info_width=8, unit_size=20):
+    def __init__(self, game_grid, info_width=6, unit_size=20):
         self.unit_size = unit_size
         self.info_width = info_width
 
