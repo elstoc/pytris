@@ -8,6 +8,9 @@ COLOURS = [
         (0,255,255),
         ]
 
+WHITE = (255,255,255)
+BLACK = (0,0,0)
+
 MV_DOWN = 1
 MV_LEFT = 2
 MV_RIGHT = 3
