@@ -30,7 +30,7 @@ class PtGame:
         self.score += self.level * rows_multiplier[rows_removed]
 
         # for hard-drops add 2 points per cell dropped
-        if rows_removed and num_down_moves > 1:
+        if num_down_moves > 1:
             self.score += 2 * num_down_moves
 
         # level starts at 1 and increases every 10 clearances
