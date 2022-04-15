@@ -22,7 +22,7 @@ class PtGame:
         pygame.time.set_timer(self.game_tick, self.speed * 8)
 
     def play(self):
-        self.game_screen.draw(self.board)
+        self.game_screen.draw(self)
         self.set_tick()
 
         # used to prevent a pair of drop movements in a row without
@@ -53,7 +53,7 @@ class PtGame:
                         moves += self.board.move_shape(MV_ROTATE)
 
                 if moves: 
-                    self.game_screen.draw(self.board)
+                    self.game_screen.draw(self)
 
                 moves = 0
                 freeze = False
@@ -69,7 +69,7 @@ class PtGame:
 
                 if moves or freeze:
                     try:
-                        self.game_screen.draw(self.board)
+                        self.game_screen.draw(self)
                     except:
                         raise PtGameOver
 
@@ -81,7 +81,7 @@ class PtGame:
                     if(rows_removed):
                         pygame.time.wait(400)
                     try:
-                        self.game_screen.draw(self.board)
+                        self.game_screen.draw(self)
                     except:
                         raise PtGameOver
 
