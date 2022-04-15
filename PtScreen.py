@@ -35,8 +35,9 @@ class PtScreen:
         # draw the outline
         pygame.draw.rect(grid_surf, (255,255,255),grid_surf.get_rect(), width=1)
 
+        # draw the next shape
         next_surf = pygame.Surface((4*self.unit_size, 4*self.unit_size))
-        next_matrix = game_grid.next_shape.list(0)
+        next_matrix = game_grid.next_shape.base_form
         for x in range(len(next_matrix[0])):
             for y in range(len(next_matrix)):
                 unit_square.fill(COLOURS[next_matrix[y][x]])

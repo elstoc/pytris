@@ -14,6 +14,9 @@ class PtShape:
         self.width = self.height = len(variants[0][0])
         self.posx = self.posy = 0
 
+        # strip empty rows from zero-rotation variant for display
+        self.base_form = [ x for x in self.list(0) if any(x) ]
+
     def move(self, movement):
         if(movement == MV_LEFT):
             self.posx -= 1
