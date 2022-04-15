@@ -14,13 +14,20 @@ class PtGame:
     def __init__(self):
         self.board = PtGameBoard()
         self.game_screen = PtScreen(self.board)
-        self.speed = 50 # lower is faster
         self.score = 0
-        self.level = 0
+        self.level = 1
+        self.row_removals = 0
 
     def set_tick(self):
         self.game_tick = pygame.USEREVENT + 0
-        pygame.time.set_timer(self.game_tick, self.speed * 8)
+        pygame.time.set_timer(self.game_tick, 400 - self.level*15)
+
+    def update_level(self):
+        # level starts at 1 and increases every 10 clearances
+        # maxes out at level 20
+        # but can be initiated at a higher level
+        old_level = self.level
+        self.level = min(20, max(self.level, (self.row_removals+10) // 10))
 
     def play(self):
         self.game_screen.draw(self)
@@ -79,6 +86,8 @@ class PtGame:
                     self.board.new_shape()
                     rows_removed = self.board.remove_rows()
                     self.score += rows_removed
+                    self.row_removals += rows_removed
+                    self.update_level()
                     if(rows_removed):
                         pygame.time.wait(400)
                     try:
