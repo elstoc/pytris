@@ -22,12 +22,15 @@ class PtGame:
         self.freeze_event = pygame.USEREVENT + 1
 
     def set_tick(self):
+        """set the game tick timer event (how often shapes fall)"""
         pygame.time.set_timer(self.game_tick, 400 - self.level*15)
 
     def set_freeze_timer(self):
+        """set a single timer event for the shape to freeze to grid"""
         pygame.time.set_timer(self.freeze_event, 200, 1)
 
     def update_stats(self, rows_removed, num_down_moves):
+        """update score and level"""
         self.row_removals += rows_removed
 
         # increase score by level * multiplier
@@ -44,6 +47,7 @@ class PtGame:
         self.level = min(20, max(self.level, (self.row_removals+10) // 10))
 
     def play(self):
+        """the main loop for a single game of pytris"""
         self.screen.update_game(self)
         self.screen.draw_game(self)
         self.set_tick()

@@ -134,6 +134,7 @@ class PtShapeFactory:
 
     def new_shape(self):
         """return a pseudo-random shape to the caller
+           attempting to avoid runs and droughts
            4 piece history with 4 rolls
            see https://simon.lc/the-history-of-tetris-randomizers"""
         shape_no = 0

@@ -72,6 +72,7 @@ class PtScreen:
         self.update_level(game.level)
 
     def draw_paused(self, game):
+        """render the text '--PAUSED--' in the middle of the game board"""
         paused_surf = pygame.Surface(self.to_px(self.info_width, 1))
         paused_surf.fill(BLACK)
         paused_text = self.font.render("-- PAUSED --", True, WHITE)
@@ -83,8 +84,6 @@ class PtScreen:
 
     def draw_game(self, game):
         """draw all elements onto the display"""
-
-        # blit everything to the screen surface
         self.screen.fill(BLACK)
         self.screen.blit(self.score_surf, self.to_px(0, game.board.height- 1))
         self.screen.blit(self.level_surf, self.to_px(0, game.board.height - 2))

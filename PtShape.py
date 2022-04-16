@@ -7,7 +7,6 @@ class PtShape:
        and change the rotation when requested"""
 
     def __init__(self, variants):
-
         self._variants = variants
         self.rotation = 0
         self.colour = random.randrange(1, len(COLOURS))
@@ -19,6 +18,7 @@ class PtShape:
         self.base_form_height = len(self.base_form)
 
     def move(self, movement):
+        """change the position or rotation of the shape"""
         if(movement == MV_LEFT):
             self.posx -= 1
         elif(movement == MV_RIGHT):
@@ -30,8 +30,8 @@ class PtShape:
             self.rotation = (self.rotation + 1) % 4
 
     def list(self, rotation = -1):
-        # return the array representing the correct rotational variant
-        # multiply each array element by color
+        """return the array representing the correct rotational variant
+           multiply each array element by color"""
         if (rotation == -1): rotation = self.rotation
         return [ [ x * self.colour for x in y ] for y in self._variants[rotation] ]
 

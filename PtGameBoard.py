@@ -36,6 +36,7 @@ class PtGameBoard:
         self.new_shape()
 
     def new_shape(self):
+        """create a new shape and position it in the top-centre of the board"""
         self.curr_shape = self.next_shape
         self.curr_shape.posx = int(self.width/2) - int(self.curr_shape.width/2)
         self.curr_shape.posy = 1 - self.curr_shape.height
