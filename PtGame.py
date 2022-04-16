@@ -63,7 +63,7 @@ class PtGame:
                 for event in pygame.event.get():
                     if (event.type == pygame.QUIT 
                             or (event.type == pygame.KEYDOWN and event.key == K_q)): 
-                        sys.exit()
+                        raise PtGameOver
                     elif (event.type == pygame.KEYDOWN and event.key in (K_RIGHT, K_LEFT, K_DOWN, K_UP, K_SPACE)):
                         keys_pressed.append(event.key)
                     elif (event.type == self.game_tick):
