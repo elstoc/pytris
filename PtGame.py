@@ -1,4 +1,4 @@
-import sys, pygame
+import pygame
 from pygame.locals import *
 
 from PtShapeFactory import PtShapeFactory
