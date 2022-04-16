@@ -21,9 +21,10 @@ class PtScreen:
         self.score_surf = pygame.Surface(self.to_px(info_width, 1))
         self.level_surf = pygame.Surface(self.to_px(info_width, 1))
 
-    def to_px(self, units1, units2):
-        """given two dimensions in units, return the same dimension converted to px"""
-        return (int(self.unit_size_px * units1), int(self.unit_size_px * units2))
+    def to_px(self, units_x, units_y):
+        """given two dimensions in units,
+        return the same dimensions as a tuple converted to px"""
+        return (int(self.unit_size_px * units_x), int(self.unit_size_px * units_y))
 
     def draw_board(self, board):
         """define a single self.unit_square 
