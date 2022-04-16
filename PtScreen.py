@@ -15,7 +15,6 @@ class PtScreen:
         self.screen = pygame.display.set_mode(self.to_px(board.width+info_width, board.height))
 
         # define drawing surfaces
-        self.screen_surf = pygame.display.get_surface()
         self.board_surf = pygame.Surface(self.to_px(board.width, board.height))
         self.shape_surf = pygame.Surface(self.to_px(4, 4))
         self.score_surf = pygame.Surface(self.to_px(info_width, 1))
@@ -73,12 +72,10 @@ class PtScreen:
         self.draw_level(game.level)
 
         # now blit everything to the screen surface
-        self.screen_surf.blit(self.score_surf, self.to_px(0, game.board.height- 1))
-        self.screen_surf.blit(self.level_surf, self.to_px(0, game.board.height - 2))
-        self.screen_surf.blit(self.board_surf, self.to_px(self.info_width,0))
-        self.screen_surf.blit(self.shape_surf, self.to_px(1,0))
-
-        self.screen.blit(self.screen_surf, self.screen_surf.get_rect())
+        self.screen.blit(self.score_surf, self.to_px(0, game.board.height- 1))
+        self.screen.blit(self.level_surf, self.to_px(0, game.board.height - 2))
+        self.screen.blit(self.board_surf, self.to_px(self.info_width,0))
+        self.screen.blit(self.shape_surf, self.to_px(1,0))
 
         # show the updated screen
         pygame.display.flip()
