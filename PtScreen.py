@@ -55,14 +55,14 @@ class PtScreen:
     def update_score(self, score):
         """render the current score in a rect"""
         self.score_surf.fill(BLACK)
-        self.score_text = self.font.render("SCORE: " + str(score), True, WHITE)
-        self.score_surf.blit(self.score_text, self.to_px(0.25,0))
+        score_text = self.font.render("SCORE: " + str(score), True, WHITE)
+        self.score_surf.blit(score_text, self.to_px(0.25,0))
 
     def update_level(self, level):
         """render the current level in a rect"""
         self.level_surf.fill(BLACK)
-        self.level_text  = self.font.render("LEVEL: " + str(level), True, WHITE)
-        self.level_surf.blit(self.level_text, self.to_px(0.25,0))
+        level_text  = self.font.render("LEVEL: " + str(level), True, WHITE)
+        self.level_surf.blit(level_text, self.to_px(0.25,0))
 
     def update_game(self, game):
         """render all game elements"""
@@ -71,10 +71,21 @@ class PtScreen:
         self.update_score(game.score)
         self.update_level(game.level)
 
+    def draw_paused(self, game):
+        paused_surf = pygame.Surface(self.to_px(self.info_width, 1))
+        paused_surf.fill(BLACK)
+        paused_text = self.font.render("-- PAUSED --", True, WHITE)
+        paused_surf.blit(paused_text, self.to_px(0.25,0))
+
+        self.screen.blit(paused_surf, self.to_px(self.info_width+game.board.width/4, game.board.height/2))
+
+        pygame.display.flip()
+
     def draw_game(self, game):
         """draw all elements onto the display"""
 
         # blit everything to the screen surface
+        self.screen.fill(BLACK)
         self.screen.blit(self.score_surf, self.to_px(0, game.board.height- 1))
         self.screen.blit(self.level_surf, self.to_px(0, game.board.height - 2))
         self.screen.blit(self.board_surf, self.to_px(self.info_width,0))
