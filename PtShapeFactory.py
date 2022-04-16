@@ -147,4 +147,3 @@ class PtShapeFactory:
         self._shape_hist.append(shape_no)
 
         return PtShape(self._shapes[shape_no])
-

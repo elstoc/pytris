@@ -148,5 +148,3 @@ class PtGameBoard:
         return '\n'.join([
             reduce(lambda x,y: x + str(y), x, '') 
                 for x in self.list()])
-
-

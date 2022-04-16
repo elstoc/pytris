@@ -1,5 +1,4 @@
 import pygame
-from pygame.locals import *
 
 from PtConsts import *
 
@@ -92,4 +91,3 @@ class PtScreen:
 
         # show the updated screen
         pygame.display.flip()
-
