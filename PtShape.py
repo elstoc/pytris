@@ -16,6 +16,7 @@ class PtShape:
 
         # strip empty rows from zero-rotation variant for display
         self.base_form = [ x for x in self.list(0) if any(x) ]
+        self.base_form_height = len(self.base_form)
 
     def move(self, movement):
         if(movement == MV_LEFT):
