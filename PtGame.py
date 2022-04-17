@@ -1,13 +1,14 @@
+"""The PtGame class, used to control the execution of the pytris game"""
+
 import pygame
 from pygame.locals import *
 
-from PtShapeFactory import PtShapeFactory
 from PtGameBoard import PtGameBoard
 from PtScreen import PtScreen
 from PtConsts import *
 
 class PtGameOver(Exception):
-    pass
+    """An error raised to indicate end of game"""
 
 class PtGame:
 
@@ -40,6 +41,31 @@ class PtGame:
         # but can be initiated at a higher level
         self.level = min(20, max(self.level, (self.row_removals+10) // 10))
 
+    def handle_events(self):
+        game_events = []
+        for event in pygame.event.get():
+            if (event.type == pygame.QUIT
+                    or (event.type == pygame.KEYDOWN and event.key == K_q)):
+                raise PtGameOver
+            elif event.type == self.game_tick:
+                game_events.append(TICK)
+                game_events.append(MV_DOWN)
+            elif (event.type == pygame.KEYDOWN):
+                if event.key == K_p:
+                    game_events.append(PAUSE)
+                if event.key == K_RIGHT:
+                    game_events.append(MV_RIGHT)
+                if event.key == K_LEFT:
+                    game_events.append(MV_LEFT)
+                if event.key == K_DOWN:
+                    game_events.append(MV_DOWN)
+                if event.key == K_UP:
+                    game_events.append(MV_ROTATE)
+                if event.key == K_SPACE:
+                    game_events.append(MV_DROP)
+
+        return game_events
+
     def play(self):
         """the main loop for a single game of pytris"""
         self.screen.update_game(self)
@@ -55,45 +81,34 @@ class PtGame:
         try:
             while 1:
                 moves = 0
-                keys_pressed = []
+                game_events = self.handle_events()
 
-                for event in pygame.event.get():
-                    if (event.type == pygame.QUIT 
-                            or (event.type == pygame.KEYDOWN and event.key == K_q)): 
-                        raise PtGameOver
-                    elif (event.type == pygame.KEYDOWN and event.key == K_p): 
-                        paused = not paused
-                        if paused:
-                            self.screen.draw_paused(self)
-                        else:
-                            self.screen.update_game(self)
-                            self.screen.draw_game(self)
-                    elif (event.type == pygame.KEYDOWN and event.key in (K_RIGHT, K_LEFT, K_DOWN, K_UP, K_SPACE)):
-                        keys_pressed.append(event.key)
-                    elif (event.type == self.game_tick):
-                        keys_pressed.append(K_DOWN)
+                if PAUSE in game_events:
+                    paused = not paused
+                if paused:
+                    self.screen.draw_paused(self)
+                else:
+                    self.screen.update_game(self)
+                    self.screen.draw_game(self)
+
+                    if TICK in game_events:
                         allow_drop = True
 
-                if not paused:
-                    for keyp in keys_pressed:
-                        if keyp == K_RIGHT:
-                            moves += self.board.move_shape(MV_RIGHT)
-                        if keyp == K_LEFT:
-                            moves += self.board.move_shape(MV_LEFT)
-                        if keyp == K_UP:
-                            moves += self.board.move_shape(MV_ROTATE)
+                    for event in game_events:
+                        if event in (MV_RIGHT, MV_LEFT, MV_ROTATE):
+                            moves += self.board.move_shape(event)
 
-                    if moves: 
+                    if moves:
                         self.screen.update_board(self.board)
                         self.screen.draw_game(self)
 
                     moves = 0
 
-                    if K_SPACE in keys_pressed and allow_drop:
+                    if MV_DROP in game_events and allow_drop:
                         moves = self.board.move_shape(MV_DROP)
                         failed_down_moves +=2
                         allow_drop = False
-                    elif K_DOWN in keys_pressed:
+                    elif MV_DOWN in game_events:
                         moves = self.board.move_shape(MV_DOWN)
                         if moves: 
                             failed_down_moves = 0
