@@ -1,8 +1,11 @@
+"""manage the rendering of the game on the screen"""
+
 import pygame
 
 from PtConsts import *
 
 class PtScreen:
+    """manage the rendering of the game on the screen"""
     def __init__(self, board, info_width=6, unit_size_px=20):
         self.unit_size_px = unit_size_px
         self.info_width = info_width
@@ -25,7 +28,7 @@ class PtScreen:
         return (int(self.unit_size_px * units_x), int(self.unit_size_px * units_y))
 
     def update_board(self, board):
-        """define a single self.unit_square 
+        """define a single self.unit_square
         fill the game surface with grid self.unit_squares"""
 
         self.board_surf.fill(BLACK)
@@ -77,7 +80,8 @@ class PtScreen:
         paused_text = self.font.render("-- PAUSED --", True, WHITE)
         paused_surf.blit(paused_text, self.to_px(0.25,0))
 
-        self.screen.blit(paused_surf, self.to_px(self.info_width+game.board.width/4, game.board.height/2))
+        self.screen.blit(paused_surf, 
+                self.to_px(self.info_width+game.board.width/4, game.board.height/2))
 
         pygame.display.flip()
 
