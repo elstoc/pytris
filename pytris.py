@@ -568,7 +568,7 @@ class PtGame:
 
         try:
             while 1:
-                moves = 0
+                moved = 0
                 game_events = self.handle_events()
 
                 if QUIT in game_events:
@@ -586,27 +586,27 @@ class PtGame:
 
                     for event in game_events:
                         if event in (MV_RIGHT, MV_LEFT, MV_ROTATE):
-                            moves += self.board.move_shape(event)
+                            moved += self.board.move_shape(event)
 
-                    if moves:
+                    if moved:
                         self.screen.update_board(self.board)
                         self.screen.draw_game(self)
 
-                    moves = 0
+                    moved = 0
 
                     if MV_DROP in game_events and allow_drop:
-                        moves = self.board.move_shape(MV_DROP)
+                        moved = self.board.move_shape(MV_DROP)
                         failed_down_moves +=2
                         allow_drop = False
                     elif MV_DOWN in game_events:
-                        moves = self.board.move_shape(MV_DOWN)
-                        if moves:
+                        moved = self.board.move_shape(MV_DOWN)
+                        if moved:
                             failed_down_moves = 0
                         else:
                             failed_down_moves +=1
                         self.set_tick()
 
-                    if moves:
+                    if moved:
                         try:
                             self.screen.update_board(self.board)
                             self.screen.draw_game(self)
@@ -617,7 +617,7 @@ class PtGame:
                         failed_down_moves = 0
                         self.board.freeze_shape()
                         rows_removed = self.board.remove_rows()
-                        self.update_stats(rows_removed, moves)
+                        self.update_stats(rows_removed, moved)
                         self.board.new_shape()
                         if rows_removed:
                             pygame.time.wait(150)
