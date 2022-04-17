@@ -14,6 +14,7 @@ COLOURS = [
 WHITE = (255,255,255)
 BLACK = (0,0,0)
 
+QUIT = -2
 PAUSE = -1
 TICK = 0
 MV_DOWN = 1
@@ -22,7 +23,8 @@ MV_RIGHT = 3
 MV_ROTATE = 4
 MV_DROP = 5
 
-KEY_EVENTS = { K_p: PAUSE,
+KEY_EVENTS = { K_q: QUIT,
+               K_p: PAUSE,
                K_RIGHT: MV_RIGHT,
                K_LEFT: MV_LEFT,
                K_DOWN: MV_DOWN,

@@ -1,7 +1,6 @@
 """The PtGame class, used to control the execution of the pytris game"""
 
 import pygame
-from pygame.locals import *
 
 from PtGameBoard import PtGameBoard
 from PtScreen import PtScreen
@@ -42,11 +41,11 @@ class PtGame:
         self.level = min(20, max(self.level, (self.row_removals+10) // 10))
 
     def handle_events(self):
+        """handle pygame events and convert to pytris events"""
         game_events = []
         for event in pygame.event.get():
-            if (event.type == pygame.QUIT
-                    or (event.type == pygame.KEYDOWN and event.key == K_q)):
-                raise PtGameOver
+            if event.type == pygame.QUIT:
+                game_events.append(QUIT)
             elif event.type == self.game_tick:
                 game_events.append(TICK)
                 game_events.append(MV_DOWN)
@@ -73,6 +72,8 @@ class PtGame:
                 moves = 0
                 game_events = self.handle_events()
 
+                if QUIT in game_events:
+                    raise PtGameOver
                 if PAUSE in game_events:
                     paused = not paused
                 if paused:
@@ -100,7 +101,7 @@ class PtGame:
                         allow_drop = False
                     elif MV_DOWN in game_events:
                         moves = self.board.move_shape(MV_DOWN)
-                        if moves: 
+                        if moves:
                             failed_down_moves = 0
                         else:
                             failed_down_moves +=1
@@ -118,7 +119,7 @@ class PtGame:
                         rows_removed = self.board.remove_rows()
                         self.update_stats(rows_removed, moves)
                         self.board.new_shape()
-                        if(rows_removed):
+                        if rows_removed:
                             pygame.time.wait(150)
                         try:
                             self.screen.update_game(self)
