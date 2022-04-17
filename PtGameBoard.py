@@ -1,29 +1,31 @@
+"""The PtGameBoard class and associated error codes"""
+
 from functools import reduce
 import copy
 from PtShapeFactory import PtShapeFactory
 from PtConsts import *
 
 class PtOffGridRight(Exception):
-    pass
+    """movement caused the shape to leave the grid (right)"""
 
 class PtOffGridLeft(Exception):
-    pass
+    """movement caused the shape to leave the grid (left)"""
 
 class PtOffGridBottom(Exception):
-    pass
+    """movement caused the shape to leave the grid (bottom)"""
 
 class PtOverlapLeft(Exception):
-    pass
+    """movement caused shaps to overlap (left)"""
 
 class PtOverlapRight(Exception):
-    pass
+    """movement caused shaps to overlap (right)"""
 
 class PtOverlapBottom(Exception):
-    pass
+    """movement caused shaps to overlap (bottom)"""
 
 class PtGameBoard:
     """The pytris game grid (default/minimum 10x20; maximum 50x50)"""
-    
+
     def __init__(self, width=10, height=20):
         self.sfact = PtShapeFactory()
 
@@ -32,7 +34,7 @@ class PtGameBoard:
 
         self.grid = [[0 for x in range(self.width)] for y in range(self.height)]
 
-        self.next_shape = self.sfact.new_shape()
+        self.curr_shape = self.next_shape = self.sfact.new_shape()
         self.new_shape()
 
     def new_shape(self):
@@ -45,15 +47,15 @@ class PtGameBoard:
     def freeze_shape(self):
         """freeze shape to grid"""
         self.grid = self.superpose_shape(self.curr_shape)
-        
+
     def remove_rows(self):
         """remove completed rows"""
         removed_rows = 0
         for y in range(self.height):
-            if (all(self.grid[y])):
-                    removed_rows +=1
-                    del self.grid[y]
-                    self.grid.insert(0,[0 for x in range(self.width)])
+            if all(self.grid[y]):
+                removed_rows +=1
+                del self.grid[y]
+                self.grid.insert(0,[0 for x in range(self.width)])
 
         return removed_rows
 
@@ -73,7 +75,7 @@ class PtGameBoard:
                 try_shape.move(extra_move if extra_move else shape_move)
                 self.superpose_shape(try_shape)
             except Exception as e:
-                if (req_movement == MV_ROTATE):
+                if req_movement == MV_ROTATE:
                     # if shape initially overlaps on the left/right after rotation
                     # then allow movements to the right/left to counteract
                     # don't allow movements of more than half the shape width
@@ -97,7 +99,7 @@ class PtGameBoard:
                     return num_moves
             else:
                 self.curr_shape = try_shape
-                if(req_movement == MV_DROP):
+                if req_movement == MV_DROP:
                     # for MV_DROP, keep repeating down moves
                     # only returning on the final (failing) movement
                     try_shape = copy.deepcopy(self.curr_shape)
@@ -115,23 +117,22 @@ class PtGameBoard:
         # error if shape overlaps a populated square or is off grid
         for y in range(shape.height):
             for x in range(shape.width):
-                if(shape.list()[y][x]):
-                    if (shape.posy + y >= self.height):
+                if shape.list()[y][x]:
+                    if shape.posy + y >= self.height:
                         raise PtOffGridBottom
-                    elif (shape.posx + x < 0):
+                    if shape.posx + x < 0:
                         raise PtOffGridLeft
-                    elif (shape.posx + x > self.width - 1):
+                    if shape.posx + x > self.width - 1:
                         raise PtOffGridRight
-                    elif (shape.posy + y >= 0
+                    if (shape.posy + y >= 0
                             and grid_out[shape.posy+y][shape.posx+x]):
-                        if (x < shape.width/2):
+                        if x < shape.width/2:
                             raise PtOverlapLeft
-                        elif (x > shape.width/2):
+                        if x > shape.width/2:
                             raise PtOverlapRight
-                        else:
-                            raise PtOverlapBottom
+                        raise PtOverlapBottom
 
-                    if (shape.posy + y >= 0):   # ignore squares above the top of the grid
+                    if shape.posy + y >= 0:   # ignore squares above the top of the grid
                         grid_out[shape.posy+y][shape.posx+x] = shape.list()[y][x]
 
         return grid_out
@@ -146,5 +147,5 @@ class PtGameBoard:
 
     def __repr__(self):
         return '\n'.join([
-            reduce(lambda x,y: x + str(y), x, '') 
+            reduce(lambda x,y: x + str(y), x, '')
                 for x in self.list()])
