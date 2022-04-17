@@ -50,19 +50,9 @@ class PtGame:
             elif event.type == self.game_tick:
                 game_events.append(TICK)
                 game_events.append(MV_DOWN)
-            elif (event.type == pygame.KEYDOWN):
-                if event.key == K_p:
-                    game_events.append(PAUSE)
-                if event.key == K_RIGHT:
-                    game_events.append(MV_RIGHT)
-                if event.key == K_LEFT:
-                    game_events.append(MV_LEFT)
-                if event.key == K_DOWN:
-                    game_events.append(MV_DOWN)
-                if event.key == K_UP:
-                    game_events.append(MV_ROTATE)
-                if event.key == K_SPACE:
-                    game_events.append(MV_DROP)
+            elif (event.type == pygame.KEYDOWN
+                    and event.key in KEY_EVENTS):
+                game_events.append(KEY_EVENTS[event.key])
 
         return game_events
 
