@@ -1,9 +1,10 @@
-from PtShape import PtShape
-from functools import reduce
+"""The PtShapeFactory class"""
+
 import random
+from PtShape import PtShape
 
 class PtShapeFactory:
-    """store all possible shape formations/rotations and 
+    """store all possible shape formations/rotations and
        deliver new PtShape objects to the game when requested"""
 
     def __init__(self):
@@ -142,7 +143,8 @@ class PtShapeFactory:
             # four attempts to choose a shape that doesn't appear in the history
             # if the first three attempts fail always choose the fourth shape
             shape_no = random.randrange(self._num_shapes)
-            if shape_no not in self._shape_hist: break
+            if shape_no not in self._shape_hist:
+                break
         del self._shape_hist[0]
         self._shape_hist.append(shape_no)
 
